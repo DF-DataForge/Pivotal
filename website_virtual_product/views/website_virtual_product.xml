@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+    <!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+    <template id="inherited_website_sale_cart_website_virtual_product" inherit_id="website_sale.cart_lines" name="website virtual product template">
+      <xpath expr="//div[@t-foreach='website_sale_order.website_order_line']//a[hasclass('js_delete_product')]" position="replace">
+          <span class="span_is_virtual">
+            <a  t-if="not line.is_virtual or (line.auction_product_direct_buy and request.env['website.auction.config.settings'].sudo().search([],limit=1).remove_cart_derect_buy_bid_product)" href='#' class='js_delete_product hidden-xs no-decoration'>
+                <small><i class='fa fa-trash-o'></i> Remove</small></a>
+          </span>
+      </xpath>
+      <xpath expr="//div[@id='cart_products']//div[contains(@t-attf-class, 'css_quantity')]" position="after" t-if="line.is_virtual">
+        <div class="css_quantity input-group oe_website_spinner wk_virtual_cart_remove justify-content-center">
+          <span class="span_is_virtual"  id='span_is_virtual' t-if="line.is_virtual">
+            <a t-att-data-virtual_source="line.virtual_source" t-att-href="'/remove/virtualproduct/'+str(line.id)">
+              <i class="fa fa-trash-o fa-4x wk_auto_remove"/>
+            </a>
+            <a id="auto_remove" t-att-data-website_order_line='website_sale_order.website_order_line' t-if="len(website_sale_order.website_order_line)==1 or (int(website_sale_order.amount_total) &lt; 0)"/>
+          </span>
+        </div>
+      </xpath>
+      <xpath expr="//div[@id='cart_products']//div[contains(@t-attf-class, 'css_quantity')]" position="attributes">
+        <attribute name="name" t-if="not line.is_virtual">wk_virtual_cart</attribute>
+        <attribute name="t-att-style">'display: none;' if  line.is_virtual  else ''</attribute>&gt;
+      </xpath>
+    </template>
+  </data>
+</odoo>

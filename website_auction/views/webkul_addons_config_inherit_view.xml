@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+<!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+<odoo>
+    <record id="wk_addons_website_auction_config" model="ir.ui.view">
+        <field name="name">Auction Addons Setting</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website_webkul_addons.config_webkul_website_addons_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//td[@name='module_website_auction']" position="replace">
+                <td>
+                    <button type="object" name="get_auction_config_view" string="Configuration" class="oe_link"></button>
+                </td>
+            </xpath>
+        </field>
+    </record>
+</odoo>

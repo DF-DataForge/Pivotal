@@ -1,0 +1,2018 @@
+<?xml version="1.0" ?>
+<odoo>
+    <data>
+				<record id="notify_subscriber_subscribe" model="mail.template">
+					<field name="name">Notification Subscribe</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Notification for Auction  {{(object.wk_auction_fk.product_tmpl_id.name or '')}}  is activated.</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;	                        
+									max-width:600px;   
+								}
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                      
+									max-width:250px;	    	               
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+								.main-div {
+									width:500px; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									padding:0 2%;
+								}  
+								.auction-msz{
+									top:-50px; 
+									font-family: Open Sans; 
+									font-size:30px; 
+									font-weight:700; 
+									color:#FFFFFF; 
+									position:relative; 
+									text-align:center; 	                  
+								} 
+								.background-image{
+									width:100%; 
+									height:315px; 
+									padding-top:5px;
+									background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+									background-repeat: no-repeat;
+									width:100%; 
+									padding:0px;
+								}
+								#logo {
+									width:100%; 
+									text-align: left;
+									background-color:#0277BD;
+								} 
+								.unsubscribe{	                   			
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333;                    		
+								}
+							
+							</style>                
+		<nav class="header-footer">
+		<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+			</a></div>                	
+		<div ><img class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+		<div class='auction-msz'>Notification Activated</div>
+		</nav>	
+		<section class="header-footer">
+		<div class='main-div'>	                   
+			<div class="user-name">
+				Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+					you have just subscribed  the notification for an  auction, we will update you about the progress on regular basis .
+			</div>
+			<div class="product">
+				<p class="product-info-title">Product Information :</p>
+				<div class="product-image">
+
+					<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+				</div>
+				<div class="product-info">
+					<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+						
+						<p><span class='product-info-span'>Base Price- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/></span></p>
+						<p><span class='product-info-span'>Highest Bid- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>		                          
+						<p><span class='product-info-span'>No of Bids- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.total_bids"/></span></p>
+						
+				</div>
+			</div> 
+			<div>
+			<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+			</div>
+			<div class="regard">
+				Regards,<br/>
+				Team <t t-out="user.company_id.name"/>
+			</div>
+		</div>
+		</section>
+		<footer class="header-footer">
+			<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+			<br/>
+				<p class="unsubscribe"> 
+					Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+						for   unsubscribe the notification.
+				</p>
+		</footer>  
+						</field>
+				</record>
+				<record id="notify_subscriber_unsubscribe" model="mail.template">
+					<field name="name">Notification Unsubscribe</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Notification for Auction  {{(object.wk_auction_fk.product_tmpl_id.name or '')}}  is now set to Inactive.</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;	                        
+									max-width:600px;   
+								}
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                      
+									max-width:250px;	               
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+								.main-div {
+									width:500px; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									padding:0 2%;
+								}  
+								.auction-msz{
+									top:-50px; 
+									font-family: Open Sans; 
+									font-size:30px; 
+									font-weight:700; 
+									color:#FFFFFF; 
+									position:relative; 
+									text-align:center; 	                  
+								} 
+								.background-image{
+									width:100%; 
+									height:315px; 
+									padding-top:5px;
+									background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+									background-repeat: no-repeat;
+									width:100%; 
+									padding:0px;
+								}
+								#logo {
+									width:100%; 
+									text-align: left;
+									background-color:#0277BD;
+								} 
+								.subscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}
+							</style>                
+		<nav class="header-footer">
+		<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+			</a></div>                	
+		<div><img class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+		<div class='auction-msz'>Notification  Deactivated</div>
+		</nav>	
+		<section class="header-footer">
+		<div class='main-div'>	                   
+			<div class="user-name">
+				Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+					you have just deactivated  the notification for an  auction.
+			</div>
+			<div class="product">
+				<p class="product-info-title">Product Information :</p>
+				<div class="product-image">
+
+					<img src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+				</div>
+				<div class="product-info">
+					<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+						
+						<p><span class='product-info-span'>Base Price- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/></span></p>
+						<p><span class='product-info-span'>Highest Bid- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>		                          
+						<p><span class='product-info-span'>No of Bids- </span> 
+									<span class='product-info-details'><t t-out="object.wk_auction_fk.total_bids"/></span></p>
+						
+				</div>
+			</div> 
+			<div>
+			<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+			</div>
+			<div class="regard">
+				Regards,<br/>
+				Team <t t-out="user.company_id.name"/>
+			</div>
+		</div>
+		</section>
+		<footer class="header-footer">
+			<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+				<br/>
+				<p class="subscribe"> 
+				Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/subscribe/{{object.wk_auction_fk.id}}"> here </a> 
+					for   subscribe the notification.
+				</p>	                    
+		</footer>          
+						</field>
+				</record>
+				<record id="notify_subscriber_auction_in_confirmed_state" model="mail.template">
+					<field name="name">Bidding for Product starts at ??</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Bidding for {{object.wk_auction_fk.product_tmpl_id.name}} will starts at {{object.wk_auction_fk.start_date}}</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;	                        
+									max-width:600px;   
+								}
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                      
+									max-width:250px;	               
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+								.main-div {
+									width:500px; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									padding:0 2%;
+								}  
+								.auction-msz{
+									top:-50px; 
+									font-family: Open Sans; 
+									font-size:30px; 
+									font-weight:700; 
+									color:#FFFFFF; 
+									position:relative; 
+									text-align:center; 	                  
+								} 
+								.background-image{
+									width:100%; 
+									height:315px; 
+									padding-top:5px;
+									background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+									background-repeat: no-repeat;
+									width:100%; 
+									padding:0px;
+								}
+								#logo {
+									width:100%; 
+									text-align: left;
+									background-color:#0277BD;
+								} 
+								.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}
+							</style>                
+							<nav class="header-footer">
+							<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+								</a></div>                	
+							<div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+							<div class='auction-msz'>Bidding is Going to Start</div>
+							</nav>	
+							<section class="header-footer">
+							<div class='main-div'>	                   
+								<div class="user-name">
+									Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+									Bidding is going to start very soon.
+								</div>
+								<div class="product">
+									<p class="product-info-title">Product Information :</p>
+									<div class="product-image">
+
+										<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+									</div>
+									<div class="product-info">
+										<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+											<p><span class='product-info-span'>Base Price- </span> 
+												<span class='product-info-details'>
+													<t t-out="object.wk_auction_fk.intial_price"></t><t t-out="user.company_id.currency_id.symbol"></t>
+												</span>
+											</p> 
+											<p><span class='product-info-span'>Starts At- </span> 
+												<span class='product-info-details'>
+													<t t-esc="object.wk_auction_fk.start_date"/>
+												</span>
+											</p>
+									</div>
+								</div> 
+								<div>
+								<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+								</div>
+								<div class="regard">
+									Regards,<br/>
+									Team <t t-out="user.company_id.name"/>
+								</div>
+							</div>
+							</section>
+							<footer class="header-footer">
+								<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+								<p class="unsubscribe"> 
+										Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+										for   unsubscribe the notification.
+								</p>
+							</footer>             
+						</field>
+				</record>
+				<record id="notify_subscriber_auction_in_running_state" model="mail.template">
+					<field name="name">Bidding for Product will Active Till ??</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Bidding for {{(object.wk_auction_fk.product_tmpl_id.name or '')}} will active till {{object.wk_auction_fk.email_get_auction_end_date()}}</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									
+									max-width:600px;   
+								}	                   	                   
+								
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                        
+								max-width:250px;	    
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+							.main-div {
+								width:500px; 
+								background-color:#FFFFFF;
+								font-family:'Raleway', 
+								sans-serif; 
+								line-height:25px;
+								margin: 0 auto;
+								padding:0 2%;
+							}  
+							.auction-msz{
+								top:-50px; 
+								font-family: Open Sans; 
+								font-size:30px; 
+								font-weight:700; 
+								color:#FFFFFF; 
+								position:relative; 
+								text-align:center; 	                  
+							}   
+						
+							.background-image{
+								width:100%; 
+								height:315px; 
+								padding-top:5px;
+								background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+								background-repeat: no-repeat;
+								width:100%; 
+								padding:0px;
+							}
+							
+							#logo {
+								width:100%; 
+								text-align: left;
+								background-color:#0277BD;
+							} 
+							.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}  
+
+							</style>	               
+									
+					
+		<nav class="header-footer">
+		<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+		</a></div>                	
+		<div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+		<div class='auction-msz'>Auction Is Set To Run</div>
+		</nav>	
+		<section class="header-footer">
+		<div class='main-div'>	                   
+			<div class="user-name">
+				Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+				Bidding is now active for this auction.
+			</div>
+			<div class="product">
+				<p class="product-info-title">Product Information :</p>
+				<div class="product-image">
+					<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+				</div>
+				<div class="product-info">
+					<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+						<p><span class='product-info-span'>Base Price- </span> 
+						<span class='product-info-details'>
+							<t t-out="object.wk_auction_fk.intial_price"></t> <t t-out="user.company_id.currency_id.symbol"></t>
+						</span>
+					</p>                               
+					<p><span class='product-info-span'>End ON- </span> 
+					<span class='product-info-details'>
+						<t t-out="object.wk_auction_fk.email_get_auction_end_date()"/>
+					</span>
+					</p>
+				</div>
+			</div> 
+			<div>
+			<a href="${object.wk_auction_fk.get_product_url()}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+			</div>
+			<div class="regard">
+				Regards,<br/>
+				Team <t t-out="user.company_id.name"/>
+			</div>
+		</div>
+		</section>  
+		<footer class="header-footer">
+			<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+			<p class="unsubscribe"> 
+					Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+						for   unsubscribe the notification.
+			</p>
+		</footer>             
+					</field>
+				</record>
+
+				<record id="notify_subscriber_auction_in_extend_state" model="mail.template">
+					<field name="name">Auction Is Extended</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Bidding for {{(object.wk_auction_fk.product_tmpl_id.name or '')}} extended till {{format_datetime(object.wk_auction_fk.email_get_auction_end_date())}}</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;	                        
+									max-width:600px;   
+								}	                 	                   
+								
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                        
+									max-width:250px;	                  
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+								.main-div {
+									width:500px; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									padding:0 2%;
+								}  
+								.auction-msz{
+									top:-50px; 
+									font-family: Open Sans; 
+									font-size:30px; 
+									font-weight:700; 
+									color:#FFFFFF; 
+									position:relative; 
+									text-align:center; 	                  
+								} 
+								.background-image{
+									width:100%; 
+									height:315px; 
+									padding-top:5px;
+									background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+									background-repeat: no-repeat;
+									width:100%; 
+									padding:0px;
+								}
+								#logo {
+									width:100%; 
+									text-align: left;
+									background-color:#0277BD;
+								} 
+								.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}
+							</style>
+		<nav class="header-footer">
+		<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+		<div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+		<div class='auction-msz'>Auction Is Extended</div>
+		</nav>	
+		<section class="header-footer">
+		<div class='main-div'>	                   
+			<div class="user-name">
+				Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+				Bidding duration is  extended for few more time.
+			</div>
+			<div class="product">
+				<p class="product-info-title">Product Information :</p>
+				<div class="product-image">
+					<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+				</div>
+				<div class="product-info">
+					<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+						<p><span class='product-info-span'>Base Price- </span> 
+							<span class='product-info-details'>
+								<t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+							</span>
+						</p>	                               
+					<p><span class='product-info-span'>End ON- </span> 
+						<span class='product-info-details'>
+							<t t-out="format_datetime(object.wk_auction_fk.email_get_auction_end_date())"/>
+						</span>
+					</p>
+				</div>
+			</div> 
+
+			<div>
+			<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+			</div>
+			<div class="regard">
+				Regards,<br/>
+				Team <t t-out="user.company_id.name"/>
+			</div>
+		</div>
+		</section>
+		<footer class="header-footer">
+			<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+			<p class="unsubscribe"> 
+					Click<a href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}}/{{object.deactivate_token}}"> here </a> 
+						for   unsubscribe the notification.
+			</p>
+		</footer>             
+						</field>
+				</record>
+				<record id="notify_subscriber_auction_in_close_state" model="mail.template">
+					<field name="name">Auction Closed</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">Auction for {{(object.wk_auction_fk.product_tmpl_id.name or '')}} has been closed</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+							<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									
+									max-width:600px;   
+								}	                   	                   
+								
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                       
+									max-width:250px;	           
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+							.main-div {
+								width:500px; 
+								background-color:#FFFFFF;
+								font-family:'Raleway', 
+								sans-serif; 
+								line-height:25px;
+								margin: 0 auto;
+								padding:0 2%;
+							}  
+							.auction-msz{
+								top:-50px; 
+								font-family: Open Sans; 
+								font-size:30px; 
+								font-weight:700; 
+								color:#FFFFFF; 
+								position:relative; 
+								text-align:center; 	                  
+							}   
+						
+							.background-image{
+								width:100%; 
+								height:315px; 
+								padding-top:5px;
+								background-image: url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+								background-repeat: no-repeat;
+								width:100%; 
+								padding:0px;
+							}
+							
+							#logo {
+								width:100%; 
+								text-align: left;
+								background-color:#0277BD;
+							}   
+							.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}
+
+							</style>	               
+					
+		<nav class="header-footer">
+		<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+		<div ><img class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+		<div class='auction-msz'>Auction Closed</div>
+		</nav>	
+		<section class="header-footer">
+		<div class='main-div'>
+			<div class="user-name">
+				<!-- Hey ! <b>{{object.partner_id.name or ''}}</b> <br/> -->
+				Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+				Sorry ,Auction has been closed.
+			</div>
+
+			<div class="product">
+				<p class="product-info-title">Product Information :</p>
+				<div class="product-image">
+
+					<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+				</div>
+				<div class="product-info">
+					<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+					<p><span class='product-info-span'>Base Price- </span> 
+						<span class='product-info-details'>
+							<t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+						</span>
+					</p>
+					<p><span class='product-info-span'>Highest Bid- </span> 
+						<span class='product-info-details'>
+						<t t-out="object.wk_auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/>
+						</span>
+					</p>
+					<p><span class='product-info-span'>No of Bids- </span> 
+						<span class='product-info-details'><t t-out="object.wk_auction_fk.total_bids"/></span>
+					</p>
+				</div>
+			</div> 
+			<div>
+			<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+			</div>
+			<div class="regard">
+				Regards,<br/>
+				Team <t t-out="user.company_id.name"/>
+			</div>
+		</div>
+		</section>
+		<footer class="header-footer">
+			<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+			<p class="unsubscribe"> 
+					Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+						for   unsubscribe the notification.
+			</p>
+		</footer>             
+						</field>
+				</record>
+				<record id="notify_subscriber_auction_in_complete_state" model="mail.template">
+					<field name="name">Auction Notify Winner </field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">It's time to know the winner of  {{object.wk_auction_fk.product_tmpl_id.name}} auction</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+						<style>
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									
+									max-width:600px;   
+								}	                   	                   
+								
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                        
+									max-width:250px;	                   
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+								.main-div {
+									width:500px; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									padding:0 2%;
+								}  
+								.auction-msz{
+									top:-50px; 
+									font-family: Open Sans; 
+									font-size:30px; 
+									font-weight:700; 
+									color:#FFFFFF; 
+									position:relative; 
+									text-align:center; 	                  
+								}   
+							
+								.background-image{
+									width:100%; 
+									height:315px; 
+									padding-top:5px;
+									background-image: url({{object.wk_auction_fk.get_base_url()}}/website_auction/static/src/img/auction-winner-banner.png); 
+									background-repeat: no-repeat;
+									width:100%; 
+									padding:0px;
+								}
+								
+								#logo {
+									width:100%; 
+									text-align: left;
+									background-color:#0277BD;
+								}  
+								.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								} 
+
+							</style>               
+					
+								<nav class="header-footer">
+								<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+								<div ><img class='background-image' src="/website_auction/static/src/img/auction-winner-banner.png"/> </div>
+								<div class='auction-msz'> </div>
+								</nav>
+
+								<section class="header-footer">
+								<div class='main-div'>
+									<div class="user-name">
+										Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+										The Auction Has been finish  .
+									</div>
+
+									<div class="product">
+										<p class="product-info-title">Product Information :</p>
+										<div class="product-image">
+
+											<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+										</div>
+										<div class="product-info">
+											<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+												<p><span class='product-info-span'>Base Price- </span> 
+															<span class='product-info-details'><t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/></span></p>
+												<p><span class='product-info-span'>Highest Bid- </span> 
+															<span class='product-info-details'><t t-out="object.wk_auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>		                          
+												<p><span class='product-info-span'>No of Bids- </span> 
+															<span class='product-info-details'><t t-out="object.wk_auction_fk.total_bids"/></span></p>
+												<p><span class='product-info-span'>Winner- </span> 
+															<span class='product-info-details'><t t-out="object.wk_auction_fk.winner_id.name"/></span></p>
+										</div>
+									</div> 
+
+									<div>
+									<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+									</div>
+									<div class="regard">
+										Regards,<br/>
+										Team <t t-out="user.company_id.name"/>
+									</div>
+								</div>
+								</section>
+								<footer class="header-footer">
+									<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+									<p class="unsubscribe"> 
+											Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+												for   unsubscribe the notification.
+									</p>
+								</footer>             
+												</field>
+				</record>
+
+				<record id="new_bid_has_been_placed_subscriber" model="mail.template">
+					<field name="name">A New Bid Placed Subscriber</field>
+					<field name="email_from">{{object.get_admin_email()}}</field>
+					<field name="subject">A New Bid Has Been Placed For {{object.wk_auction_fk.product_tmpl_id.name}} ! Hurry</field>
+					<field name="email_to">{{(object.partner_id.email or '') or ''}}</field>
+					<field name="model_id" ref="website_auction.model_wk_auction_subscriber"/>
+					<field name="auto_delete" eval="True"/>
+					<field name="body_html" type="html">
+						<style>
+							
+								.header-footer{
+									width:80%; 
+									background-color:#FFFFFF;
+									font-family:'Raleway', 
+									sans-serif; 
+									line-height:25px;
+									margin: 0 auto;
+									
+									max-width:600px;   
+								}	                   	                   
+								
+								body {
+									background-color:#F2F2F2;
+								} 
+								.user-name{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-title{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}                   
+								.product-image{
+									float:left;
+									max-height:100%;
+									max-width:50%;                   
+									min-height:100%;
+									height:150px;
+									min-width:30%;
+								}
+								.product-image img{
+									height:100px;	                       
+									max-width:250px;	           
+								}	
+								.product-info{
+									height:150px;
+									line-height:10px;
+								}       
+								.product-name{
+									size:18px;
+									color:#81A8D6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.question-title{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.reply{
+									text-align: left;
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.bynow-btn{
+									background-color:#4CAF50;
+									padding:5px 12px;
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.viewdetails-btn{
+									background-color:#0288d1;
+									padding:5px 12px; 
+									margin:12px auto;                     
+									size:16px;
+									color:#FFFFFF;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								footer {
+									text-align:center;
+									height:50px;
+									background-color:#E0E0E0; 
+									margin-bottom:8%;
+									display: flex;
+									align-items: center;
+									justify-content: center;
+								}
+								footer p{
+									display: block;
+									margin-left: auto;
+									margin-right: auto;
+								}     
+								.powered{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}  
+								.company-name{       
+									size:16px;
+									color:#4EB4C6;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								.product-info-span,.product-info-details{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								.product-info-details{
+									font-weight: 400;
+								}
+								table{
+									width:100%;
+								}
+								thead{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 600;
+								}
+								tbody{
+									size:16px;
+									color:#333333;
+									font-family: 'Opensans' Sans-serif;
+									font-weight: 400;
+								}
+								table, th, td {
+									border: 1px solid #CCCCCC;
+									border-collapse: collapse;
+								}
+								th, td {
+									padding-top: 8px;
+									text-align: left;
+								}
+								#tr-head {
+									font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-size: 16px;
+									color: #404040;
+									width:100%;
+								}
+								#tr-body {
+									font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+									font-weight: normal;
+									font-size: 14px;
+									color: #404040;
+									width:100%;
+								}  
+							.main-div {
+								width:500px; 
+								background-color:#FFFFFF;
+								font-family:'Raleway', 
+								sans-serif; 
+								line-height:25px;
+								margin: 0 auto;
+								padding:0 2%;
+							}  
+							.auction-msz{
+								top:-50px; 
+								font-family: Open Sans; 
+								font-size:30px; 
+								font-weight:700; 
+								color:#FFFFFF; 
+								position:relative; 
+								text-align:center; 	                  
+							}  
+							.background-image{
+								width:100%; 
+								height:315px; 
+								padding-top:5px;
+								background-image:url(${object.wk_auction_fk.get_base_url()}/website_auction/static/src/img/after-bid-banner.png); 
+								background-repeat: no-repeat;
+								width:100%; 
+								padding:0px;
+							}
+							#logo {
+								width:100%; 
+								text-align: left;
+								background-color:#0277BD;
+							} 
+							.unsubscribe{
+										margin-top:8px; 
+										font-family: Arial, 'Helvetica Neue', Helvetica, 
+										sans-serif; font-size:13px; 
+										color:#333333; 
+										text-align: center;
+								}
+							
+					    </style>	               
+			
+					<nav class="header-footer">
+					<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+					<div><img  class='background-image' src="/website_auction/static/src/img/after-bid-banner.png"/> </div>
+					<div class='auction-msz'>A new bid has been placed</div>
+					</nav>	
+					<section class="header-footer">
+					<div class='main-div'>	                    
+						<div class="user-name">
+							Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+							A new bid has been Placed .
+						</div>
+
+						<div class="product">
+							<p class="product-info-title">Product Information :</p>
+							<div class="product-image">
+
+								<img t-attf-src="/web/image/product.product/{{object.wk_auction_fk.product_id.id}}/image_128" height="100px" width="100px" alt="Product image"></img>
+							</div>
+							<div class="product-info">
+								<p class="product-name"> <t t-out="object.wk_auction_fk.product_name"/>.</p>
+									<p><span class='product-info-span'>Base Price- </span> 
+										<span class='product-info-details'>
+											<t t-out="object.wk_auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+										</span>
+									</p>
+									<p><span class='product-info-span'>Highest Bid- </span> 
+										<span class='product-info-details'>
+										<t t-out="object.wk_auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/>
+										</span>
+									</p>
+									<p><span class='product-info-span'>Bid Active Till- </span>
+										<span class='product-info-details'>
+											<t t-out="format_datetime(object.wk_auction_fk.email_get_auction_end_date())"/>
+										</span>
+										</p>
+									<p><span class='product-info-span'>No of Bids- </span> 
+										<span class='product-info-details'>
+											<t t-out="object.wk_auction_fk.total_bids"/>
+										</span>
+									</p>
+							</div>
+						</div> 
+
+						<div>
+						<a t-attf-href="{{object.wk_auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+						</div>
+						<div class="regard">
+							Regards,<br/>
+							Team <t t-out="user.company_id.name"/>
+						</div>
+					</div>
+					</section>
+					<footer class="header-footer">
+						<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+						<p class="unsubscribe"> 
+								Click<a t-attf-href="{{object.wk_auction_fk.get_base_url()}}/auction/unsubscribe/{{object.wk_auction_fk.id}}/{{object.deactivate_token}}"> here </a> 
+									for   unsubscribe the notification.
+						</p>
+					</footer>           
+					</field>
+				</record>
+    </data>
+</odoo>

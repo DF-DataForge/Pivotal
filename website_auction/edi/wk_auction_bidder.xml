@@ -1,0 +1,2306 @@
+<?xml version="1.0" ?>
+<odoo>
+    <!-- <data noupdate="1" > -->
+    <data>
+		<record id="notify_bidder_auction_in_confirmed_state" model="mail.template">
+	        <field name="name">Bidding for Product starts at ??</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Bidding for {{(object.auction_fk.product_name or '')}} will starts at {{format_datetime(object.auction_fk.start_date)}}</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+     				<style>
+							header-footer{
+								width:80%; 
+								background-color:#FFFFFF;
+								font-family:'Raleway', 
+								sans-serif; 
+								line-height:25px;
+								margin: 0 auto;
+								
+								max-width:600px;   
+							}	                   	                   
+							
+							body {
+								background-color:#F2F2F2;
+							} 
+							.user-name{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							.product-info-title{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 600;
+							}                   
+							.product-image{
+								float:left;
+								max-height:100%;
+								max-width:50%;                   
+								min-height:100%;
+								height:150px;
+								min-width:30%;
+							}
+							.product-image img{
+								height:100px;		                                     
+							max-width:250px;	                  
+							}	
+							.product-info{
+								height:150px;
+								line-height:10px;
+							}       
+							.product-name{
+								size:18px;
+								color:#81A8D6;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 600;
+							}
+							.question-title{
+								text-align: left;
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 600;
+							}
+							.reply{
+								text-align: left;
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							.bynow-btn{
+								background-color:#4CAF50;
+								padding:5px 12px;
+								size:16px;
+								color:#FFFFFF;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							.viewdetails-btn{
+								background-color:#0288d1;
+								padding:5px 12px; 
+								margin:12px auto;                     
+								size:16px;
+								color:#FFFFFF;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							footer {
+								text-align:center;
+								height:50px;
+								background-color:#E0E0E0; 
+								margin-bottom:8%;
+								display: flex;
+								align-items: center;
+								justify-content: center;
+							}
+							footer p{
+								display: block;
+								margin-left: auto;
+								margin-right: auto;
+							}     
+							.powered{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}  
+							.company-name{       
+								size:16px;
+								color:#4EB4C6;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							.product-info-span,.product-info-details{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 600;
+							}
+							.product-info-details{
+								font-weight: 400;
+							}
+							table{
+								width:100%;
+							}
+							thead{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 600;
+							}
+							tbody{
+								size:16px;
+								color:#333333;
+								font-family: 'Opensans' Sans-serif;
+								font-weight: 400;
+							}
+							table, th, td {
+								border: 1px solid #CCCCCC;
+								border-collapse: collapse;
+							}
+							th, td {
+								padding-top: 8px;
+								text-align: left;
+							}
+							#tr-head {
+								font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+								font-size: 16px;
+								color: #404040;
+								width:100%;
+							}
+							#tr-body {
+								font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+								font-weight: normal;
+								font-size: 14px;
+								color: #404040;
+								width:100%;
+							}  
+						.main-div {
+							width:500px; 
+							background-color:#FFFFFF;
+							font-family:'Raleway', 
+							sans-serif; 
+							line-height:25px;
+							margin: 0 auto;
+							padding:0 2%;
+						}  
+						.auction-msz{
+							top:-50px; 
+							font-family: Open Sans; 
+							font-size:30px; 
+							font-weight:700; 
+							color:#FFFFFF; 
+							position:relative; 
+							text-align:center; 	                  
+						}   
+					
+						.background-image{
+							width:100%; 
+							height:315px; 
+							padding-top:5px;
+							background-image: url('/website_auction/static/src/img/auction-state-banner.png'); 
+							background-repeat: no-repeat;
+							width:100%; 
+							padding:0px;
+						}
+						
+						#logo {
+							width:100%; 
+							text-align: left;
+							background-color:#0277BD;
+						}   
+						.unsubscribe{
+									margin-top:8px; 
+									font-family: Arial, 'Helvetica Neue', Helvetica, 
+									sans-serif; font-size:13px; 
+									color:#333333; 
+									text-align: center;
+							}
+
+	                </style>                
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+                		</a></div>                	
+	                <div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+	                <div class='auction-msz'>Bidding is Going to Start</div>
+	                </nav>	
+	                <section class="header-footer">
+                	<div class='main-div'>	                   
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+	                         Bidding is going to start very soon.
+	                    </div>
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+
+								
+									<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+	                                <p><span class='product-info-span'>Base Price- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="object.auction_fk.intial_price or ''"/><t t-out="user.company_id.currency_id.symbol or ''"/> 
+                            			</span>
+                            		</p> 
+	                                <p><span class='product-info-span'>Starts At- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="format_datetime(object.auction_fk.start_date) or ''"/>
+                            			</span>
+                        			</p>
+	                        </div>
+	                    </div> 
+	                    <div>
+	                    <a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                </footer>             
+	            </field>
+	    </record>
+		<record id="notify_bidder_auction_in_running_state" model="mail.template">
+	        <field name="name">Bidding for Product will Active Till ??</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Bidding for {{(object.auction_fk.product_name or '')}} will active till {{format_datetime(object.auction_fk.email_get_auction_end_date())}}</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+    				 <style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                     
+	                      max-width:250px;	              
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }   
+                   
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                     
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    }   
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+	                </style>	               
+                              
+               
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+                	</a></div>                	
+	                <div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+	                <div class='auction-msz'>Auction Is Set To Run</div>
+	                </nav>	
+	                <section class="header-footer">
+                	<div class='main-div'>	                   
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+	                        Bidding is now active for this auction.
+	                    </div>
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+								
+									<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+                                	<p><span class='product-info-span'>Base Price- </span> 
+                        			<span class='product-info-details'>
+                        				<t t-out="object.auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+                        			</span>
+                        		</p>                               
+                                <p><span class='product-info-span'>End ON- </span> 
+                    			<span class='product-info-details'>
+                    				<t t-out="format_datetime(object.auction_fk.email_get_auction_end_date())"/>
+                    			</span>
+                        		</p>
+	                        </div>
+	                    </div> 
+	                    <div>
+	                    <a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>  
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                    <br/>
+		              		<p class="unsubscribe"> 
+		                     	Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+		                     	 for   unsubscribe the notification.
+	                 	  	</p>
+	                </footer>             
+	            </field>
+	    </record>
+		<record id="notify_bidder_auction_in_extend_state" model="mail.template">
+	        <field name="name">Auction Is Extended</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Hurry Bidding for {{(object.auction_fk.product_name or '')}} extended till {{format_datetime(object.auction_fk.email_get_auction_end_date())}}</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+	                  <style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;	                        
+	                      	max-width:600px;   
+	                    }	                 	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                       
+	                      max-width:250px;	                  
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }   
+                   
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                     
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    } 
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+	                </style>
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+	                <div><img class="background-image" src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+	                <div class='auction-msz'>Auction Is Extended</div>
+	                </nav>	
+	                <section class="header-footer">
+                	<div class='main-div'>	                   
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+	                        Bidding duration is  extended for few more time.
+	                    </div>
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+									<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+	                                <p><span class='product-info-span'>Base Price- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="object.auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+                            			</span>
+                        			</p>	                               
+             					<p><span class='product-info-span'>End ON- </span> 
+                        			<span class='product-info-details'>
+                        				<t t-out="format_datetime(object.auction_fk.email_get_auction_end_date())"/>
+                        			</span>
+                        		</p>
+	                        </div>
+	                    </div> 
+
+	                    <div>
+	                    <a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>  
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                    <br/>
+		              		<p class="unsubscribe"> 
+		                     	Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+		                     	 for   unsubscribe the notification.
+	                 	  	</p>
+	                </footer>        
+	        </field>
+	    </record>
+		<record id="notify_bidder_auction_in_close_state" model="mail.template">
+	        <field name="name">Auction Closed</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Auction for {{(object.auction_fk.product_name or '')}} has been closed</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+    				<style>
+	                   .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                     
+	                      max-width:250px;	                
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }   
+                   
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                     
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    }   
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+	                </style>	               
+               
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+	                <div ><img class='background-image' src="website_auction/static/src/img/auction-state-banner.png"/> </div>
+	                <div class='auction-msz'>Auction Closed</div>
+	                </nav>	
+	                <section class="header-footer">
+                    <div class='main-div'>
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+	                        Sorry ,Auction has been closed.
+	                    </div>
+
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+
+								
+									<img src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+                                <p><span class='product-info-span'>Base Price- </span> 
+                        			<span class='product-info-details'>
+                        				<t t-out="object.auction_fk.intial_price" /> <t t-out="user.company_id.currency_id.symbol"/>
+                        			</span>
+                        		</p>
+                                <p><span class='product-info-span'>Highest Bid- </span> 
+                        			<span class='product-info-details'>
+                    				<t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/>
+                    				</span>
+                    			</p>
+                                <p><span class='product-info-span'>No of Bids- </span> 
+                        			<span class='product-info-details'><t t-out="object.auction_fk.total_bids"/></span>
+                        		</p>
+	                        </div>
+	                    </div> 
+	                    <div>
+	                    <a t-att-href="object.auction_fk.get_product_url()"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                    <br/>
+		              		<p class="unsubscribe"> 
+		                     	Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+		                     	 for   unsubscribe the notification.
+	                 	  	</p>
+	                </footer>             
+	            </field>
+	    </record>
+		<record id="new_bid_has_been_placed_bidder" model="mail.template">
+	        <field name="name">A New Bid Placed Bidder</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">A New Bid Has Been Placed For {{object.auction_fk.product_name}} ! Hurry</field>
+			<field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+				<style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;                    
+	                       
+	                      	max-width:250px;	                
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }  
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image:url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/after-bid-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    } 
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+                </style>	               
+               
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+	                <div><img class='background-image' src="/website_auction/static/src/img/after-bid-banner.png"/> </div>
+	                <div class='auction-msz'>A new bid has been placed</div>
+	                </nav>	
+	                <section class="header-footer">
+                	<div class='main-div'>	                    
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+	                        A new bid has been Placed .
+	                    </div>
+
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+
+								
+									<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+	                                <p><span class='product-info-span'>Base Price- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="object.auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/>
+                            			</span>
+                            		</p>
+	                                <p><span class='product-info-span'>Highest Bid- </span> 
+                            			<span class='product-info-details'>
+                        				<t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/>
+                        				</span>
+                        			</p>
+                        			<p><span class='product-info-span'>Bid Active Till- </span>
+	                        			<span class='product-info-details'>
+	                        				<t t-out="format_datetime(object.auction_fk.email_get_auction_end_date())"/>	
+	                    				</span>
+                    				 </p>	                                			
+		                            <p><span class='product-info-span'>Your Current Bid- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="object.bid_offer"/>  
+                                				<t t-out="user.company_id.currency_id.symbol"/>
+                            			</span>
+                            		</p>
+	                                <p><span class='product-info-span'>No of Bids- </span> 
+                            			<span class='product-info-details'>
+                            				<t t-out="object.auction_fk.total_bids"/>
+                            			</span>
+                            		</p>
+	                        </div>
+	                    </div> 
+
+	                    <div>
+	                    <a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                    <br/>
+		              		<p class="unsubscribe"> 
+		                     	Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+		                     	 for   unsubscribe the notification.
+	                 	  	</p>
+	                </footer>             
+	            </field>
+	    </record>
+		<record id="notify_auction_losers" model="mail.template">
+	        <field name="name">Auction Notify Losers </field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Auction for {{(object.auction_fk.product_name or '')}} has been finish</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+              	<style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                     
+	                      max-width:250px;	                  
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+	                    .main-div {
+	                        width:500px; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        padding:0 2%;
+	                    }  
+	                    .auction-msz{
+		                    top:-50px; 
+		                    font-family: Open Sans; 
+		                    font-size:30px; 
+		                    font-weight:700; 
+		                    color:#FFFFFF; 
+		                    position:relative; 
+		                    text-align:center; 	                  
+	                    }   
+	                   
+	                    .background-image{
+		                    width:100%; 
+		                    height:315px; 
+		                    padding-top:5px;
+	                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+	                   		background-repeat: no-repeat;
+	                   		width:100%; 
+	                   		padding:0px;
+	                    }
+	                     
+	                    #logo {
+	                    	width:100%; 
+	                        text-align: left;
+	                        background-color:#0277BD;
+	                    }   
+	                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+                </style>	               
+               
+				<nav class="header-footer">
+				<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+				<div ><img class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+				<div class='auction-msz'>Auction Has Finish</div>
+				</nav>	
+				<section class="header-footer">
+				<div class='main-div'>
+					<div class="user-name">
+						Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>	                        
+						I am sorry to tell you,unfortunately ,you have <b>lost</b> an auction.
+					</div>
+
+					<div class="product">
+						<p class="product-info-title">Product Information :</p>
+						<div class="product-image">
+
+							
+								<img src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+						</div>
+						<div class="product-info">
+							<p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+								<p><span class='product-info-span'>Base Price- </span> 
+											<span class='product-info-details'><t t-out="object.auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/></span></p>
+								<p><span class='product-info-span'>Highest Bid- </span> 
+											<span class='product-info-details'><t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>
+								<p><span class='product-info-span'>Your Last Bid- </span> 
+											<span class='product-info-details'><t t-out="object.bid_offer"/>  
+											<t t-out="user.company_id.currency_id.symbol"/></span></p>
+								<p><span class='product-info-span'>No of Bids- </span> 
+											<span class='product-info-details'><t t-out="object.auction_fk.total_bids"/></span></p>
+						</div>
+					</div> 
+
+					<div>
+					<a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+					</div>
+					<div class="regard">
+						Regards,<br/>
+						Team <t t-out="user.company_id.name"/>
+					</div>
+				</div>
+				</section>
+					<footer class="header-footer">
+						<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+					</footer>             
+	        </field>
+	    </record>
+
+		<record id="notify_auction_winner" model="mail.template">
+	        <field name="name">Auction Notify Winner </field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Congratulate you have win the auction for {{object.auction_fk.product_name or ''}}</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+                   <style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                     
+	                      	max-width:250px;	    	               
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+	                    .main-div {
+	                        width:500px; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        padding:0 2%;
+	                    }  
+	                    .auction-msz{
+		                    top:-50px; 
+		                    font-family: Open Sans; 
+		                    font-size:30px; 
+		                    font-weight:700; 
+		                    color:#FFFFFF; 
+		                    position:relative; 
+		                    text-align:center; 	                  
+	                    }   
+	                   
+	                    .background-image{
+		                    width:100%; 
+		                    height:315px; 
+		                    padding-top:5px;
+	                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-winner-banner.png); 
+	                   		background-repeat: no-repeat;
+	                   		width:100%; 
+	                   		padding:0px;
+	                    }
+	                     
+	                    #logo {
+	                    	width:100%; 
+	                        text-align: left;
+	                        background-color:#0277BD;
+	                    }   
+	                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+	                </style>               
+			
+					<nav class="header-footer">
+						<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/></a></div>                	
+						<div><img class='background-image' src="/website_auction/static/src/img/auction-winner-banner.png"/> </div>
+						<div class='auction-msz'> </div>
+					</nav>
+
+						<section class="header-footer">
+							<div class='main-div'>
+								<div class="user-name">
+									Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+									We  Congratulate  ,you on being accepted as a <b>Winner</b> of an auction.
+								</div>
+
+								<div class="product">
+									<p class="product-info-title">Product Information :</p>
+									<div class="product-image">
+											<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+									</div>
+									<div class="product-info">
+										<p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+											<p><span class='product-info-span'>Base Price- </span> 
+														<span class='product-info-details'><t t-out="object.auction_fk.intial_price"/> <t t-out="user.company_id.currency_id.symbol"/></span></p>
+											<p><span class='product-info-span'>Highest Bid- </span> 
+														<span class='product-info-details'><t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>
+											<p><span class='product-info-span'>Your Current Bid- </span> 
+														<span class='product-info-details'><t t-out="object.bid_offer"/>  
+														<t t-out="user.company_id.currency_id.symbol"/></span></p>
+											<p><span class='product-info-span'>No of Bids- </span> 
+														<span class='product-info-details'><t t-out="object.auction_fk.total_bids"/></span></p>
+									</div>
+								</div> 
+
+								<div>
+									<a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+								</div>
+								<div class="regard">
+									Regards,<br/>
+									Team <t t-out="user.company_id.name"/>
+								</div>
+							</div>
+						</section>
+					<footer class="header-footer">
+						<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+					</footer>             
+	            </field>
+	    </record>
+		<record id="notify_auction_auto_bid_end" model="mail.template">
+	        <field name="name">Notify Auto Bid Outbid</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Your auto bid for {{(object.auction_fk.product_name or '')}} auction  no longer active </field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+     				<style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                     
+	                      	max-width:250px;	    	               
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }   
+                   
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                     
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    }   
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }
+
+	                </style>	               
+                              
+               
+	                <nav class="header-footer">
+                	<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+                		</a></div>                	
+	                <div><img  class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+	                <div class='auction-msz'>Auto Bid Outbid</div>
+	                </nav>	
+	                <section class="header-footer">
+                	<div class='main-div'>	                   
+	                    <div class="user-name">
+	                        Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>	                       
+	                         Your auto bid for auction no longer active,Please raise maximum bid amount.
+	                    </div>
+
+	                    <div class="product">
+	                        <p class="product-info-title">Product Information :</p>
+	                        <div class="product-image">
+
+								
+									<img t-attf-src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+	                        </div>
+	                        <div class="product-info">
+	                            <p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+
+                        			<p><span class='product-info-span'>End Date- </span>
+                        			<span class='product-info-details'>        				
+		                				<t t-out="format_datetime(object.auction_fk.email_get_auction_end_date())"/>
+                        			</span> 
+                        			</p>	                    
+	                                <p><span class='product-info-span'>Your Auto Bids- </span> 
+                            			<span class='product-info-details'><t t-out="object.bid_offer"/>
+                            				<t t-out="user.company_id.currency_id.symbol"/></span></p>
+                            				
+	                                <p><span class='product-info-span'>Current Bids- </span> 
+                            			<span class='product-info-details'><t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>
+	                        </div>
+	                    </div> 
+
+	                    <div>
+	                    <a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+	                	</div>
+	                    <div class="regard">
+	                        Regards,<br/>
+	                        Team <t t-out="user.company_id.name"/>
+	                    </div>
+                    </div>
+	                </section>
+	                <footer class="header-footer">
+	                    <p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+	                    <br/>
+		              		<p class="unsubscribe"> 
+		                     	Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+		                     	 for   unsubscribe the notification.
+	                 	  	</p>
+	                </footer>             
+	            </field>
+	    </record>
+		<record id="notify_auction_auto_bid_place" model="mail.template">
+	        <field name="name">Notify Auto Bid Place</field>
+	        <field name="email_from">{{object.get_admin_email()}}</field>
+	        <field name="subject">Auto bid for {{(object.auction_fk.product_name or '')}} place on your behalf</field>
+	         <field name="email_to">{{(object.partner_id.email or '')}}</field>
+	        <field name="model_id" ref="website_auction.model_wk_auction_bidder"/>
+	        <field name="auto_delete" eval="True"/>
+	        <field name="body_html" type="html">
+     				<style>
+	                    .header-footer{
+	                        width:80%; 
+	                        background-color:#FFFFFF;
+	                        font-family:'Raleway', 
+	                        sans-serif; 
+	                        line-height:25px;
+	                        margin: 0 auto;
+	                        
+	                      	max-width:600px;   
+	                    }	                   	                   
+	                      
+	                    body {
+	                        background-color:#F2F2F2;
+	                    } 
+	                    .user-name{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-title{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }                   
+	                    .product-image{
+	                        float:left;
+	                        max-height:100%;
+	                        max-width:50%;                   
+	                        min-height:100%;
+	                        height:150px;
+	                        min-width:30%;
+	                    }
+	                    .product-image img{
+	                        height:100px;	                      
+	                      	max-width:250px;	                
+	                    }	
+	                    .product-info{
+	                        height:150px;
+                         	line-height:10px;
+	                    }       
+	                    .product-name{
+	                        size:18px;
+	                        color:#81A8D6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .question-title{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .reply{
+	                        text-align: left;
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .bynow-btn{
+	                        background-color:#4CAF50;
+	                        padding:5px 12px;
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .viewdetails-btn{
+	                        background-color:#0288d1;
+	                        padding:5px 12px; 
+	                        margin:12px auto;                     
+	                        size:16px;
+	                        color:#FFFFFF;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    footer {
+	                        text-align:center;
+	                        height:50px;
+	                        background-color:#E0E0E0; 
+	                        margin-bottom:8%;
+	                        display: flex;
+	                        align-items: center;
+	                        justify-content: center;
+	                    }
+	                    footer p{
+	                        display: block;
+	                        margin-left: auto;
+	                        margin-right: auto;
+	                    }     
+	                    .powered{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }  
+	                    .company-name{       
+	                        size:16px;
+	                        color:#4EB4C6;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    .product-info-span,.product-info-details{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    .product-info-details{
+	                    	font-weight: 400;
+	                    }
+	                    table{
+	                        width:100%;
+	                    }
+	                    thead{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 600;
+	                    }
+	                    tbody{
+	                        size:16px;
+	                        color:#333333;
+	                        font-family: 'Opensans' Sans-serif;
+	                        font-weight: 400;
+	                    }
+	                    table, th, td {
+	                        border: 1px solid #CCCCCC;
+	                        border-collapse: collapse;
+	                    }
+	                    th, td {
+	                        padding-top: 8px;
+	                        text-align: left;
+	                    }
+	                    #tr-head {
+	                        font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-size: 16px;
+	                        color: #404040;
+	                        width:100%;
+	                    }
+	                    #tr-body {
+	                        font-family:Arial, 'Helvetica Neue', Helvetica, sans-serif;
+	                        font-weight: normal;
+	                        font-size: 14px;
+	                        color: #404040;
+	                        width:100%;
+	                    }  
+                    .main-div {
+                        width:500px; 
+                        background-color:#FFFFFF;
+                        font-family:'Raleway', 
+                        sans-serif; 
+                        line-height:25px;
+                        margin: 0 auto;
+                        padding:0 2%;
+                    }  
+                    .auction-msz{
+	                    top:-50px; 
+	                    font-family: Open Sans; 
+	                    font-size:30px; 
+	                    font-weight:700; 
+	                    color:#FFFFFF; 
+	                    position:relative; 
+	                    text-align:center; 	                  
+                    }   
+                   
+                    .background-image{
+	                    width:100%; 
+	                    height:315px; 
+	                    padding-top:5px;
+                        background-image: url(${object.auction_fk.get_base_url()}/website_auction/static/src/img/auction-state-banner.png); 
+                   		background-repeat: no-repeat;
+                   		width:100%; 
+                   		padding:0px;
+                    }
+                     
+                    #logo {
+                    	width:100%; 
+                        text-align: left;
+                        background-color:#0277BD;
+                    } 
+                    .unsubscribe{
+	                   			 margin-top:8px; 
+	                   			 font-family: Arial, 'Helvetica Neue', Helvetica, 
+	                   			 sans-serif; font-size:13px; 
+	                   			 color:#333333; 
+	                   			 text-align: center;
+	                    }  
+
+	                </style>	               
+                              
+               
+					<nav class="header-footer">
+					<div id='logo'><a href='#'><img src="/website_auction/static/src/img/logo.png"/>
+						</a></div>                	
+					<div><img  class='background-image' src="/website_auction/static/src/img/auction-state-banner.png"/> </div>
+					<div class='auction-msz'>Auto Bid Placed</div>
+					</nav>	
+					<section class="header-footer">
+					<div class='main-div'>	                   
+						<div class="user-name">
+							Hey ! <b><t t-out="object.partner_id.name or ''"/></b> <br/>
+								An auto bid has been placed on your behalf.
+						</div>
+
+						<div class="product">
+							<p class="product-info-title">Product Information :</p>
+							<div class="product-image">
+
+								
+									<img src="/web/image/product.product/{{object.auction_fk.product_id.id}}/image_128" style="width: 64px; height: 64px; object-fit: contain;" alt="Product image"></img>
+							</div>
+							<div class="product-info">
+								<p class="product-name"> <t t-out="object.auction_fk.product_name"/>.</p>
+									<p><span class='product-info-span'>End Date- </span>
+									<span class='product-info-details'>        				
+										<t t-out="format_datetime(object.auction_fk.email_get_auction_end_date())"/>
+									</span> 
+									</p>	                    
+									<p><span class='product-info-span'>Your Bids Limit- </span> 
+										<span class='product-info-details'><t t-out="object.bid_offer"/>
+											<t t-out="user.company_id.currency_id.symbol"/></span></p> 
+									<p><span class='product-info-span'>Placed Bid- </span> 
+										<span class='product-info-details'><t t-out="object.auction_fk.current_price or 0.0"/>  <t t-out="user.company_id.currency_id.symbol"/></span></p>	                        </div>
+						</div> 
+
+						<div>
+						<a t-attf-href="{{object.auction_fk.get_product_url()}}"><button type="button" class="viewdetails-btn">View Details</button></a>               
+						</div>
+						<div class="regard">
+							Regards,<br/>
+							Team <t t-out="user.company_id.name"/>
+						</div>
+					</div>
+					</section>
+					<footer class="header-footer">
+						<p><span class="powered">Powered By</span><span class="company-name"> <t t-out="user.company_id.name"/></span></p>
+						<br/>
+							<p class="unsubscribe"> 
+								Click<a t-attf-href="{{object.auction_fk.get_base_url()}}/auction/unsubscribe/{{object.auction_fk.id}}/{{object.get_deactivate_token()}}"> here </a> 
+									for   unsubscribe the notification.
+							</p>
+					</footer>             
+	        </field>
+	    </record>
+    </data>
+</odoo>

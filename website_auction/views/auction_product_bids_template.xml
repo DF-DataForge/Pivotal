@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+    <!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+    <template id="product_auction" name="website auction product bids">
+        <t t-call='website.layout'>
+        <div class='container product_bids'>
+          <div class='bids_msz'>
+            <t t-if="wk_auction and wk_auction.state in ['complete'] ">
+              <div id="won_auction" class="alert alert-success text-center winner_msz" t-if="login_user_is_winner">
+                <b>Congratulations</b> ,You have won the Auction.<a href='/my/auctions#won_auctions' title='Add the Win product in Your Cart' ><i class='fa fa-cart-plus text-success'></i></a></div>
+              <div id="won_auction" class="alert alert-danger text-center losser_msz" t-if="login_user_is_losser">
+                <b>Sorry</b>, You have lost the Auction.<a href='/my/auctions#bids' title='Click to Show your Bid Information'><i class='fa fa-arrow-circle-o-right text-danger' role="button"></i></a></div>
+            </t>
+              <div class='text-center'><t t-call='website_auction.deafult_msz'/></div>
+          </div>
+          <div class='row ml0 mr0'>
+
+            <div  class='col-md-8 oe_product mb64'>
+              <div>
+                  <div class="span_auction_details_model_title">Auction Details :</div>
+                  <hr/>
+                  <div class='div_auction_details'>
+                      <div class='row' t-if='website.publish_start_date'><span class='span_auction_details_title col-md-6'>Auction Start Date -</span>
+                          <span class='span_auction_date col-md-6'>
+                              <t t-esc='auction_start_date'/>
+                          </span>
+                      </div>
+                        <div class='row' t-if='website.publish_end_date'><span class='span_auction_details_title col-md-6'>Auction End Date -</span>
+                        <span class='span_auction_date col-md-6'>
+                            <t t-esc='auction_end_date'/>
+                        </span>
+                      </div>
+                        <div class='row'  t-if='website.publish_intial_price'><span class='span_auction_details_title col-md-6'>Auction Base Price -</span>
+                          <span class='span_auction_date col-md-6'>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                          </span>
+                      </div>
+                      <div class='row' t-if='website.publish_current_price'><span class='span_auction_details_title col-md-6'>Current Bid -</span>
+                          <span class='span_auction_date col-md-6'>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                          </span>
+                      </div>
+                      <div class='row' t-if="website.publish_winner_name and wk_auction.state in ['complete','finish']"><span class='span_auction_details_title col-md-6'>Winner/Bid -</span>
+                          <!-- <p> WINNER <t t-esc="wk_auction.get_auction_config_settings_vals().get('publish_bidders_name')"/></p> -->
+                          <!-- <p> WINNER <t t-esc="wk_auction.cross_name(wk_auction.winner_id,'winner')"/></p> -->
+                          <!-- <t t-if="wk_auction.get_auction_config_settings_vals().get('publish_bidders_name') == 'cross'"> -->
+                            <span class='span_auction_date col-md-6'>
+                            <t t-esc="wk_auction.cross_name(wk_auction.winner_id,'winner')" />
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            </span>
+                          <!-- </t>
+                          <t t-else="">
+                            <span class='span_auction_date col-md-6'>
+                            <t t-esc="wk_auction.winner_id.name" />
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                          </span>
+                          </t> -->
+                      </div>
+                      <div class='row' t-if='website.publish_user_highest_bid'><span class='span_auction_details_title col-md-6'>Your Highest Bid -</span>
+                          <span class='span_auction_date col-md-6'>
+                            <t t-esc="wk_auction.currency_id._convert(website._get_partner_heighest_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                          </span>
+                      </div>
+                    </div>
+                  <div class="span_auction_details_model_title">ALL Bids :</div>
+                  <hr/>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th t-if="website.publish_bidders_name">Bidder Name</th>
+                        <th>Bidding Amount</th>
+                        <th>Date &amp;  Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <t t-if='website.publish_bid_record'>
+                        <t t-foreach="bidders" t-as="bidder">
+                      <tr t-att-class="'hidden to_hide' if bidder_index &gt; 9 else ''">
+                        <td t-if="website.publish_bidders_name">
+                            <t t-esc='wk_auction.cross_name(bidder.partner_id,"bidders")'/>
+                        </td>
+                        <td>
+                          <t t-esc="wk_auction.currency_id._convert(bidder.bid_offer,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " />
+                        </td>
+                        <td><t t-esc='bidder.create_date'/></td>
+                      </tr>
+                      </t>
+                        <tr t-att-class="'hidden' if wk_auction.bidder_ids and len(wk_auction.bidder_ids) &lt; 10 else ''">
+                        <!-- <td colspan="3"><a href="" class="o_my_show_more btn btn-xs btn-default"><span>Show more</span><span class="hidden">Show less</span></a></td> -->
+                      </tr>
+                      </t>
+                    </tbody>
+                  </table>
+                  <div t-if="pager" class="o_portal_pager text-center">
+                    <t t-call="website.pager"/>
+                  </div>
+              </div>
+            </div>
+            <div class='col-md-4 col-lg-4 col-sm-12 oe_product mb64'>
+                <div class="row ml0 mr0">
+                    <div class="span_auction_details_model_title">Product Information :</div>
+                </div>
+                <hr/>
+                <div class='auction_details_product row'>
+                    <t t-set='product'  t-value="wk_auction.product_tmpl_id"/>
+                    <div class="col-md-7">
+                        <a itemprop="url" t-att-href="'/shop/product/%s'%(product.id)">
+                            <span itemprop="image"
+                                t-field="wk_auction.product_image"
+                                t-att-alt="wk_auction.name"
+                                t-options='{"widget": "image", "class": "img img-responsive   o_alternative_product pull-left mt16", "alt-field": "name"}'
+                                />
+                        </a>
+                    </div>
+                    <div class="col-md-4 mt16">
+                      <h5><strong><a itemprop="name" t-att-href="'/shop/product/%s'%(product.id)" t-field="wk_auction.product_name"/></strong></h5>
+                      <t t-if='wk_auction.product_description_sale'>
+                        <t t-if="len(wk_auction.product_description_sale)&gt;72">
+                          <p style="display:inline" class="text-muted" t-esc="wk_auction.product_description_sale[:72]"/><span class="text-muted d-none" t-esc="wk_auction.product_description_sale[72::]"/><span id="dots">...</span><a href="#" id="more">more</a>
+                        </t>
+                        <t t-else="">
+                          <div class="text-muted" t-esc="wk_auction.product_description_sale"/>
+                        </t>
+                      </t>
+                  </div>
+                </div>
+                <div class="">
+                    <t t-call='website_auction.bids'/>
+                    <!-- <t t-call='website_auction.place_bid'/> -->
+                    <t t-call='website_auction.status_msz'/>
+                    <t t-call='website_auction.details_watchlist'/>
+                    <t t-call='website_auction.buy_now'/>
+                    <t t-call='website_auction.details_model'/>
+                </div>
+            </div>
+          </div>
+        </div>
+        </t>
+    </template>
+  </data>
+</odoo>

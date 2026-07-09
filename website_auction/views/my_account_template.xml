@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+    <!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+    <!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+
+    <template id="portal_my_home_menu_sale" name="Portal layout : Auctions" inherit_id="portal.portal_breadcrumbs" priority="20">
+            <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+              <li t-if="page_name == 'auctions'" t-attf-class="breadcrumb-item">
+                  <a t-attf-href="/my/auctions?{{ keep_query() }}">Auctions</a>
+                  <!-- <span>Auctions</span> -->
+              </li>
+            </xpath>
+      </template>
+
+      <template id="portal_my_auctions" name="Portal My Home :Auctions" inherit_id="portal.portal_my_home" priority="50">
+          <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+              <t t-call="portal.portal_docs_entry">
+                  <t t-set="icon" t-value="'/website_auction/static/description/icon.png'"/>
+                  <t t-set="title">Auctions</t>
+                  <t t-set="text">You can hold auctions for any products on your website</t>
+                  <t t-set="url" t-value="'/my/auctions'"/>
+                  <t t-set="placeholder_count" t-value="'win_auction_count'"/>
+              </t>
+          </xpath>
+      </template>
+
+    <template id="my_auction" name="My Auction">
+          <t t-call="portal.portal_layout">
+              <div id="wrap">
+              <div class="card-body bg-white mb-2 mt-3">
+                <ul class="nav nav-tabs nav-justified " style="font-size: 25px;">
+                    <li class="nav-item">
+                        <a href="/my/auctions" t-att-class="'active show nav-link' if won_auctions else 'nav-link'">
+                        <b><i class="fa fa-calendar-check-o"></i> Won Auction</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/my/bids?state=active" t-att-class="'active show nav-link' if active_bids else 'nav-link'">
+                          <b><i class="fa fa-calendar-plus-o"></i> Active Bids</b></a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="/my/bids" t-att-class="'active show nav-link' if all_bids else 'nav-link'">
+                            <b><i class="fa fa-calendar-times-o"></i> Bids History</b></a>
+                    </li>
+                </ul>
+
+              <div id="your-auction-tab-content" class="tab-content" style="overflow-x:scroll">
+                <div class="tab-pane active show">
+                  <div class='text-center'>
+                    <h3 class="mt16" t-if="no_auctions">Currently no auction  won  by  you.</h3>
+                    <h3 class="mt16" t-if="no_bids">Currently no auction bid made by you.</h3>
+                    <h3 class="mt16" t-if="no_active_bids">Currently no active bid made by you.</h3>
+                  </div>
+                    <t t-if="won_auctions">
+                        <table class="table table-hover o_my_status_table">
+                            <thead>
+                              <tr class="active">
+                                <th>Auction #</th>
+                                <th>Win Date</th>
+                                <th></th>
+                                <th>Bid Amount</th>
+                              </tr>
+                            </thead>
+                            <t t-foreach="won_auctions" t-as="auction">
+                                <tr t-att-class="'hidden to_hide' if auction_index &gt; 10 else ''">
+                                    <td>
+                                        <a t-att-href="'/product/auction/'+str(auction.id)" ><t t-esc="auction.name"/></a>
+                                    </td>
+                                    <td><span t-esc="auction.get_auction_end_date()"/></td>
+                                    <t t-if='auction.state=="complete"'>
+                                      <td t-if='website.sale_get_order()'>
+                                      <a t-att-href="'/auction/cart/update/'+str(auction.id)" class="btn btn-sm btn-primary">Add To Cart</a>
+                                      </td>
+                                      <td t-if='not website.sale_get_order()'>
+                                        <a  t-att-href="'/auction/cart/create/'+str(auction.id)" class="btn btn-sm btn-primary">Check Out <i class="fa fa-arrow-right"></i></a>
+                                      </td>
+                                    </t>
+                                    <t t-if='auction.state=="finish"'>
+                                      <td>
+                                        <t t-set='order_id' t-value='auction.sudo().order_id'/>
+                                         <a t-att-href="'#'" class="btn btn-sm btn-primary" t-if='order_id.state=="draft"' t-field='order_id.state'/>
+                                         <a t-att-href="'/my/orders/'+str(order_id.id)" class="btn btn-sm btn-primary" t-if='order_id.state!="draft"' t-field='order_id.state'/>
+
+                                      </td>
+                                    </t>
+                                    <td><span t-esc="auction.current_price" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></td>
+                                </tr>
+                            </t>
+                        </table>
+                    </t>
+
+                    <t t-if="active_bids">
+                        <table class="table table-hover o_my_status_table">
+                            <thead>
+                              <tr class="active">
+                                <th>Auction #</th>
+                                <th>Bid Date</th>
+                                <th>Bid Amount</th>
+                                <th>Bid Type</th>
+                              </tr>
+                            </thead>
+                            <t t-foreach="active_bids" t-as="active_bid">
+
+                                <tr t-att-style="'color:red' if active_bid.bid_type=='auto' else ''" t-att-class="'hidden to_hide' if  active_bid_index &gt; 9 else ''">
+                                    <td>
+                                        <a t-att-href="'/product/auction/'+str(active_bid.auction_fk.id)" >
+                                          <t t-esc="active_bid.auction_fk.name"/></a>
+                                    </td>
+                                    <td><span t-field="active_bid.date"/></td>
+                                    <td><span t-esc="active_bid.bid_offer" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></td>
+                                   <td><span t-esc="website._get_bid_type(active_bid)"/></td>
+                                </tr>
+                            </t>
+
+                        </table>
+                    </t>
+                    <t t-if="all_bids">
+                        <table class="table table-hover o_my_status_table">
+                            <thead>
+                              <tr class="active">
+                                <th>Auction #</th>
+                                <th>Bid Date</th>
+                                <th>Bid Amount</th>
+                                <th>Bid Status</th>
+                                 <th>Bid Type</th>
+                                <th>Auction Status</th>
+                              </tr>
+                            </thead>
+                            <t t-foreach="all_bids" t-as="bid">
+                                <tr t-att-style="'color:red' if bid.bid_type=='auto' else ''"  t-att-class="'hidden to_hide' if bid_index &gt; 9 else ''">
+                                    <td>
+                                      <a t-att-href="'/product/auction/'+str(bid.auction_fk.id)" >
+                                        <t t-esc="bid.auction_fk.name"/></a>
+                                    </td>
+                                    <td><span t-field="bid.date"/></td>
+
+                                    <td><span t-esc="bid.bid_offer" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/></td>
+                                    <td><span t-esc="website._get_bid_state(bid)"/></td>
+                                     <td><span t-esc="website._get_bid_type(bid)"/></td>
+                                    <td><span t-esc="website._get_auction_state(bid.auction_fk)"/></td>
+                                </tr>
+                            </t>
+                        </table>
+                      </t>
+                      <div t-if="pager" class="o_portal_pager text-center">
+                        <t t-call="portal.pager"/>
+                      </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>

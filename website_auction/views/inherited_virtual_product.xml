@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+		<!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+		<!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+<odoo>
+	<data>
+
+		<template id="inherited_website_virtual_product" name="website.virtual.product.template" inherit_id="website_virtual_product.inherited_website_sale_cart_website_virtual_product" >
+			<xpath expr="//div//span[hasclass('span_is_virtual')]" position="attributes" t-if="line.is_virtual">
+				<attribute name="t-att-style">'display: none;'if line.virtual_source=='wk_website_auction' else ''</attribute>
+			</xpath>
+    	</template>
+	</data>
+</odoo>

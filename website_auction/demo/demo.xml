@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+  <data noupdate="1">
+    <record id="auction_product" model="product.product">
+      <field name="name">Product For Auction Demo Confirmed</field>
+      <field name="sale_ok">1</field>
+      <field name="website_published">1</field>
+      <field name="website_sequence">1</field>
+      <field name="image_1920" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+    <record id="auction1" model="wk.website.auction">
+      <field name="name">Demo Auction</field>
+      <field name="state">confirmed</field>
+      <field name="bid_increment_rule_ids" eval="[
+    						(4, ref('website_auction.wk_bid_increment_rule_1_to_500')),
+                (4, ref('website_auction.wk_bid_increment_rule_500_to_1000')),
+                (4, ref('website_auction.wk_bid_increment_rule_1000_to_5000')),
+                (4, ref('website_auction.wk_bid_increment_rule_5000_to_10000')),
+    				]" />
+      <field name="product_id" ref="website_auction.auction_product" />
+      <field name="product_tmpl_id" ref="website_auction.auction_product_product_template" />
+      <field name="start_date" eval="(datetime.now() + relativedelta(months=1)).strftime('%Y-%m-%d')" />
+      <field name="end_date" eval="(datetime.now() + relativedelta(months=2)).strftime('%Y-%m-%d')" />
+
+      <field name="product_name">Product For Auction Demo </field>
+      <field name="product_description_sale">Product For Auction Demo </field>
+      <field name="product_image" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+
+    <record id="auction_product_2" model="product.product">
+      <field name="name">Product For Auction Demo Running</field>
+      <field name="sale_ok">1</field>
+      <field name="website_published">1</field>
+      <field name="website_sequence">2</field>
+      <field name="image_1920" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+
+    <record id="auction2" model="wk.website.auction">
+      <field name="name">Demo Auction Running</field>
+      <field name="state">running</field>
+      <field name="bid_increment_rule_ids" eval="[
+    						(4, ref('website_auction.wk_bid_increment_rule_1_to_500')),
+                (4, ref('website_auction.wk_bid_increment_rule_500_to_1000')),
+                (4, ref('website_auction.wk_bid_increment_rule_1000_to_5000')),
+                (4, ref('website_auction.wk_bid_increment_rule_5000_to_10000')),
+    				]" />
+      <field name="product_id" ref="website_auction.auction_product_2" />
+      <field name="product_tmpl_id" ref="website_auction.auction_product_2_product_template" />
+      <field name="product_name">Product For Auction Demo 2</field>
+      <field name="product_description_sale">Product For Auction Demo 2</field>
+      <field name="product_image" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+
+    <record id="auction_product_3" model="product.product">
+      <field name="name">Auction Demo (Go to My account->Auction) for checkout</field>
+      <field name="sale_ok">1</field>
+      <field name="website_published">1</field>
+      <field name="website_sequence">3</field>
+      <field name="image_1920" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+    
+    <record id="auction3" model="wk.website.auction">
+      <field name="name">Demo Auction Checkout</field>
+      <field name="state">complete</field>
+      <field name="bid_increment_rule_ids" eval="[
+      (4, ref('website_auction.wk_bid_increment_rule_1_to_500')),
+                (4, ref('website_auction.wk_bid_increment_rule_500_to_1000')),
+                (4, ref('website_auction.wk_bid_increment_rule_1000_to_5000')),
+                (4, ref('website_auction.wk_bid_increment_rule_5000_to_10000')),
+    				]" />
+      <field name="product_id" ref="website_auction.auction_product_3" />
+      <field name="product_tmpl_id" ref="website_auction.auction_product_3_product_template" />
+      <field name="end_date" eval="(datetime.now() + relativedelta(minutes=10)).strftime('%Y-%m-%d')" />
+      <field name="product_name">Product For Auction Demo Checkout</field>
+      <field name="product_description_sale">Product For Auction Demo Checkout</field>
+      <field name="product_image" type="base64" file="website_auction/static/description/icon.png" />
+    </record>
+    <record id="auction_product_bidder" model="wk.auction.bidder">
+     <field name="partner_id" ref="base.partner_admin"/>
+     <field name="bid_offer">500</field>
+     <field name="bid_type">simple</field>
+     <field name="auction_fk" ref="website_auction.auction3"/>
+    </record>
+    <record id="auction_product_subscribber" model="wk.auction.subscriber">
+      <field name="partner_id" ref="base.partner_admin"/>
+      <field name="wk_auction_fk" ref="website_auction.auction3"/>
+     </record>
+  </data>
+</odoo>

@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_auction_manager,wk.website.auction.manager,model_wk_website_auction,sales_team.group_sale_manager,1,1,1,1
+access_auction_users,wk.website.auction.user,model_wk_website_auction,,1,1,0,0
+
+access_rule_manager,wk.bid.increment.rule.manager,model_wk_bid_increment_rule,sales_team.group_sale_manager,1,1,1,1
+access_rule_users,wk.bid.increment.rule.user,model_wk_bid_increment_rule,,1,0,0,0
+
+access_bidder_manager,wk.auction.bidder.manager,model_wk_auction_bidder,sales_team.group_sale_manager,1,1,1,1
+access_bidder_users,wk.auction.bidder.user,model_wk_auction_bidder,,1,1,1,1
+
+access_subscriber_manager,wk.auction.subscriber.manager,model_wk_auction_subscriber,sales_team.group_sale_manager,1,1,1,1
+access_subscriber_users,wk.auction.subscriber.user,model_wk_auction_subscriber,,1,1,1,1
+
+access_website_auction_config_settings,wk_website_auction_config_settings_all,website_auction.model_website_auction_config_settings,sales_team.group_sale_manager,1,1,1,0

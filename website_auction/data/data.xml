@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <function model="wk.website.auction" name="wk_activate_website_view"/>
+
+        <record id="wk_bid_increment_rule_1_to_500" model="wk.bid.increment.rule">
+            <field name="name">1-499</field>
+            <field name="from_price">1</field>
+            <field name="to_price">499</field>
+            <field name="increment_by">10</field>
+        </record>
+        <record id="wk_bid_increment_rule_500_to_1000" model="wk.bid.increment.rule">
+            <field name="name">500-999</field>
+            <field name="from_price">500</field>
+            <field name="to_price">999</field>
+            <field name="increment_by">20</field>
+        </record>
+        <record id="wk_bid_increment_rule_1000_to_5000" model="wk.bid.increment.rule">
+
+            <field name="name">1000-4999</field>
+            <field name="from_price">1000</field>
+            <field name="to_price">4999</field>
+            <field name="increment_by">50</field>
+        </record>
+        <record id="wk_bid_increment_rule_5000_to_10000" model="wk.bid.increment.rule">
+            <field name="name">5000 -9999</field>
+            <field name="from_price">5000</field>
+            <field name="to_price">9999</field>
+            <field name="increment_by">100</field>
+        </record>
+
+        <record id="product_on_auction_page" model="website.menu">
+            <field name="name">Auction</field>
+            <field name="url">/products-on-auction</field>
+            <field name="parent_id" ref="website.main_menu"/>
+            <field name="sequence" type="int">60</field>
+        </record>
+    </data>
+</odoo>

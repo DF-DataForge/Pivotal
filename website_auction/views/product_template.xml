@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+  <data>
+    <!-- Copyright (c) 2017-Present Webkul Software Pvt. Ltd. (<https://webkul.com/>) -->
+    <!-- See LICENSE URL <https://store.webkul.com/license.html/> for full copyright and licensing details. -->
+    
+    <template id="products_item" inherit_id="website_sale.products_item">
+      <xpath expr="//div[hasclass('product_price')]" position="attributes">
+        <attribute name="t-if">product.auction_product_sale</attribute>
+      </xpath>
+      <!-- <xpath expr="//h6[hasclass('o_wsale_products_item_title')]//a[hasclass('text-primary')]" position="replace">
+          <t t-if="product.tmpl_auction_ids">
+            <t t-if="product.tmpl_auction_ids[0]">
+              <a class="text-primary text-decoration-none" itemprop="name" t-att-href="product_href" t-att-content="product.name" t-field="product.tmpl_auction_ids[0].name"/>
+              
+            </t>
+          </t>
+            <t t-else="">
+              <a class="text-primary text-decoration-none" itemprop="name" t-att-href="product_href" t-att-content="product.name" t-field="product.name"/>
+              
+            </t>
+      </xpath> -->
+    </template>
+
+
+    <template id="products_description_auction" inherit_id="website_sale.products_description" name="Auction Product Description">
+        <xpath expr="//div[hasclass('oe_subdescription')]" position="replace">
+            <t t-if='product.description_sale'>
+              <div class="oe_subdescription mb-2 text-muted small" contenteditable="false">
+                  <div itemprop="description" t-field="product.description_sale"/>
+              </div>
+            </t>
+        </xpath>
+    </template>
+
+
+    <template id="inherited_products_description_website_auction" name= 'Auction Timer'
+      inherit_id="website_sale.products_item" customize_show="True">
+
+      <!-- <xpath expr="//div[hasclass('oe_subdescription')]" position="replace"> -->
+      <xpath expr="//div[hasclass('o_wsale_product_information_text')]" position="after">
+        <t t-set="wk_auction" t-value="product._get_nondraft_auction()"/>
+        <t t-if='wk_auction'>
+          <div class="text-info oe_subdescription" contenteditable="false">
+            <!-- <div itemprop="description" t-if='product.description_sale'>
+              <t t-esc="product.description_sale[:30]+'..' if len(product.description_sale)&gt;32 else product.description_sale"/>
+            </div> -->
+          </div>
+          <p class="mb-1" t-if="wk_auction">
+              <t t-set="wk_config" t-value="wk_auction.get_publish_fields()"/>
+              <span t-if="wk_auction.state in ['confirmed','running','extend']" t-att-class="'col-md-8 p-1 category_page_timer '+('auction_running' if wk_auction.state in ['confirmed','running','extend'] else 'auction_stop')">
+                  <t t-if="wk_config.get('auction_yet_not_running') and website.publish_start_date">
+                    <span>Starts At&#160;</span>
+                    <t t-raw="website._get_auction_start_time_left_countdown(wk_auction)"/>
+                  </t>
+                  <t t-if="wk_config.get('auction_yet_not_finish') and website.publish_end_date">
+                    <t t-raw="website._get_auction_time_left_countdown(wk_auction)"/>
+                    <span>&#160;&#160; left</span>
+                  </t>
+              </span>
+              <div style="padding-left:0px;padding-right:0px" t-if="wk_auction.state not in ['finish','draft']">
+                <span><strong>No. of Bids: </strong></span>
+                <span>
+                    <a    class='span_total_bids' t-att-href="'/product/auction/'+str(wk_auction.id)">
+                      <t t-esc='wk_auction.total_bids'/> Bids</a>
+                  </span>
+              </div>
+
+              <div t-if='website.publish_current_price'  style="position: absolute; bottom: 0; padding: 5px 0;">
+                <b>
+                  <!-- Current Bid - <t t-esc='wk_auction.current_price and wk_auction.current_price or wk_auction.intial_price' t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/> -->
+                  Current Bid - <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                </b>
+              </div>
+          </p>
+
+        </t>
+        <!-- <div t-if="not wk_auction" class="text-info oe_subdescription" contenteditable="false">
+          <div itemprop="description" t-field="product.description_sale"></div>
+        </div> -->
+
+
+      </xpath>
+      <xpath expr="//div[hasclass('o_wsale_product_btn')]" position="attributes">
+        <attribute name="t-att-style">'display:none' if product._get_nondraft_auction() else ''</attribute>
+      </xpath>
+    </template>
+
+    <template id="website_auction.countdown" name="website auction countdown" >
+      <span class="days span_time_digit">00</span>
+      <span class='span_time_unit'>Days   </span>
+      <span class="hours span_time_digit">00</span>
+      <span class='span_time_unit'>Hours   </span>
+      <span class="minutes span_time_digit">00</span>
+      <span class='span_time_unit'>Min  </span>
+      <span class="seconds span_time_digit">00</span>
+      <span class='span_time_unit'>Sec  </span>
+    </template>
+    <template id="website_auction.bids" name="website auction bids">
+      <t t-if='wk_auction'>
+        <div t-nocache="" class='d-flex justify-content-between'>
+          <div  class='auction_amount mt16' t-if='website.publish_current_price'>
+            <span class='span_auction_title'>&#160;&#160;&#160;&#160;
+              <t t-if="wk_auction.state == 'running'">Current Bid:</t>
+              <t t-if="wk_auction.state != 'running'">Highest Bid:</t>
+            </span>
+            <span class='span_current_bid_amount'>
+              <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+            </span>
+          </div>
+          <div class='text-right mt16 mr8' t-if='website.publish_total_bids'>
+            <a class='span_total_bids' t-att-href="'/product/auction/'+str(wk_auction.id)">  [
+              <t t-esc='wk_auction.total_bids'/> Bids]
+            </a>
+          </div>
+        </div>
+      </t>
+    </template>
+    <template id="website_auction.place_bid" name="website auction place bid" >
+      <t t-if='wk_auction and auction_running_extend'>
+        <div t-nocache="" class='div_place_bid'>
+          <form action='/auction/place/bid' method="post">
+            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+            <input type="hidden" name="auction_fk" t-att-value="wk_auction.id"/>
+            <div class="row bid-type" style="margin-left:0px"
+                          t-if='website.publish_simple_bid or website.publish_auto_bid'>
+              <label class="radio-inline" t-if='website.publish_simple_bid and not login_user_have_auto_bid'>
+                <input type="radio" name="bid_type" class="me-2" value="simple" t-att-checked="'checked' if not login_user_have_auto_bid else ''"/>Simple Bid
+              </label>
+              <label class="ml-2 radio-inline" t-if='website.publish_auto_bid'>
+                <input type="radio" name='bid_type' class="me-2" value="auto" t-att-checked="'checked' if login_user_have_auto_bid else ''"/>Auto Bid
+              </label>
+            </div>
+            <br/>
+            <div class="row mx-2" style="margin-left:0px"  >
+              <div class='col-md-6 auction_amount'>
+                <input type="number" class="form-control" name='bid_offer' step="any"
+                                     t-att-min="round(wk_auction.currency_id._convert(website._get_next_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()),2)" t-att-value="round(wk_auction.currency_id._convert(website._get_next_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()),2)"/>
+              </div>
+              <div class='col-md-6'>
+                <t t-set='login_user_msz' t-value='1 if request.uid == %(base.public_user)d else 0'/>
+                <button type="submit" class="btn btn-primary  btn_submit_auction submit_auction_enabel" t-att-disabled="0">
+                  <t t-if="login_user_msz">
+                    <a href="/web/login" style="color:white;">Login First</a>
+                  </t>
+                  <t t-else="">Place My Bid</t>
+                </button>
+              </div>
+            </div>
+          </form>
+          <div class='col-md-12 mx-2' t-if='website.publish_next_bid'>
+            <span class='auction_amount span_next_bid_title'> Offer Bid
+              <span class='span_next_bid_amount'>
+                <t t-esc="wk_auction.currency_id._convert(website._get_next_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+              </span> or more.
+            </span>
+          </div>
+        </div>
+      </t>
+    </template>
+
+    <template id="website_auction.details_watchlist" name="website auction details watchlist" >
+      <t  t-if="wk_auction and wk_auction.state not in ['draft']">
+        <!-- <div class='row'> -->
+        <br/>
+        <div class='row' t-if='website.publish_info_link or website.publish_subscribe_link'>
+          <div class='col-md-7 mb-2' t-if='wk_auction.state not in ["close","complete","finish"] and website.publish_subscribe_link'>
+            <t t-set='login_user_has_subscribed' t-value='website._auction_subscribed(wk_auction)'/>
+            <a id="auction_subscription" t-att-href="('/auction/unsubscribe/%s/%s'%(wk_auction.id,login_user_has_subscribed.deactivate_token))
+                if login_user_has_subscribed
+                else  ('/auction/subscribe/%s/'%(wk_auction.id))">
+              <i t-att-class="'fa fa-bell-slash pe-1' if login_user_has_subscribed else 'fa fa-bell pe-1'"></i>
+              <t t-if="login_user_has_subscribed">Unsubscribe Watch-list</t>
+              <t t-if="not login_user_has_subscribed">Subscribe Watch-list</t>
+            </a>
+          </div>
+          <div class='col-md-5' t-if='website.publish_info_link and wk_auction.state not in ["close","complete","finish","confirmed"]'>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#auction-details-model">Auction Details</a>
+          </div>
+        </div>
+        <!-- </div> -->
+      </t>
+    </template>
+
+    <template id="website_auction.buy_now" name="website auction buy now" >
+      <t t-if="wk_auction and wk_auction.buynow_option and wk_auction.state not in ['draft','finish']">
+        <div class='col-md-12' t-if='wk_auction.state not in ["close","complete","finish","confirmed"]'>
+          <hr/>
+          <div class='div_auction_or'>
+            <span class='span_auction_or'>or</span>
+          </div>
+          <!-- </div>
+        <div class="col-md-12"> -->
+          <span>
+            <a t-att-href="'/auction/buy/now/'+str(wk_auction.id)" class="btn btn-sm btn-primary btn_buy_now_auction">Buy Now</a>
+          </span>
+          <span class='span_buy_now_amount'>&#160;For
+            <t t-esc="wk_auction.product_id.currency_id._convert(int(wk_auction.buynow_price),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+          </span>
+        </div>
+        <br/>
+        <br/>
+      </t>
+    </template>
+    <template id='website_auction.status_msz' name='website auction status msz' >
+      <t t-if='wk_auction'>
+        <t t-if="wk_auction.state=='complete' and website.publish_auction_complete">
+          <div class='alert alert-success auction_status_msz'>
+            <t t-esc='website.auction_complete_msz'/>
+          </div>
+        </t>
+        <t t-if="wk_auction.state=='cancel' and wk_auction.publish_auction_cancel">
+          <div class='alert alert-info auction_status_msz'>
+            <t t-esc='website.auction_cancel_msz'/>
+          </div>
+        </t>
+        <t t-if="wk_auction.state=='close' and website.publish_auction_close">
+          <div class='alert alert-info auction_status_msz'>
+            <t t-esc='website.auction_close_msz'/>
+          </div>
+        </t>
+      </t>
+    </template>
+
+    <template id='website_auction.deafult_msz' name='website login submit error msz' >
+      <t t-if='wk_auction'>
+        <div t-if="website.publish_login_first" id="loginfirst" class="alert alert-info auction_error loginfirst" style="display:none">
+          <t t-esc='website.publish_login_first_msz'/>
+        </div>
+        <div t-if="website.auction_bid_submitted" id="submited" class="alert alert-info auction_error bid_submited" style="display:none">
+          <t t-esc='website.auction_bid_submitted_msz'/>
+        </div>
+        <div id="bid_notallow" class="alert alert-info auction_error bid_notallow" style="display:none">
+          <p>Bid for auction close now.</p>
+        </div>
+        <div t-if="website.publish_unexpected_error" id="error" class="alert alert-warning auction_error bid_error" style="display:none">
+          <t t-esc='website.publish_unexpected_error_msz'/>
+        </div>
+        <div t-if="website.publish_min_bid_error" id="min_bid" class="alert alert-warning auction_error minbid_error" style="display:none">
+          <t t-esc='website.publish_min_bid_error_msz'/>
+        </div>
+        <div t-if="website.publish_min_autobid_error" id="autobid" class="alert alert-warning auction_error autobid_error" style="display:none">
+          <t t-esc='website.publish_min_autobid_error_msz'/>
+        </div>
+        <div t-if="website.publish_bid_subscribe" id="bid_subscribe" class="alert alert-info auction_error bid_subscribe" style="display:none">
+          <t t-esc='website.publish_bid_subscribe_msz'/>
+        </div>
+        <div t-if="website.publish_bid_unsubscribe" id="bid_unsubscribe" class="alert alert-info auction_error bid_unsubscribe" style="display:none">
+          <t t-esc='website.publish_bid_unsubscribe_msz'/>
+        </div>
+      </t>
+    </template>
+    <template id='website_auction.details_model' name='website auction details model' >
+      <div id="auction-details-model" class="modal fade" role="dialog" t-if="wk_auction">
+        <div class="modal-dialog ">
+          <div class="modal-content">
+            <div class="modal-header col-md-10 offset-md-1">
+              <span class="span_auction_details_model_title">Auction Details</span>
+            </div>
+            <div class="modal-body">
+              <div class="row ml0 mr0" t-if='website.publish_start_date'>
+                <span class='span_auction_details_title col-md-6'>Auction Start Date -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-esc='auction_start_date'/>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_end_date'>
+                <span class='span_auction_details_title col-md-6'>Auction End Date -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-esc='auction_end_date'/>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_intial_price'>
+                <span class='span_auction_details_title col-md-6'>Auction Base Price -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-esc="wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                  <t t-esc='wk_auction.intial_price' t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_current_price'>
+                <span class='span_auction_details_title col-md-6'>Current Bid -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_user_highest_bid'>
+                <span class='span_auction_details_title col-md-6'>Your Highest Bid -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-esc="wk_auction.currency_id._convert(website._get_partner_heighest_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                  <t t-if="wk_auction and wk_auction.state in ['complete'] and (login_user_is_winner or login_user_is_losser)">
+                    <b>[
+                      <a t-if='login_user_is_winner' href='/my/home#won_auctions'>Won</a>
+                      <a t-if='login_user_is_losser' t-att-href="'/product/auction/'+str(wk_auction.id)">Lose</a>]
+                    </b>
+                  </t>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_user_auto_bid and login_user_have_auto_bid or login_user_was_auto_bidder'>
+                <span class='span_auction_details_title col-md-6'>Your Auto Bid -</span>
+                <span class='span_auction_date col-md-6'>
+                  <t t-if='login_user_have_auto_bid'>
+                    <t t-esc="wk_auction.currency_id._convert(login_user_have_auto_bid.bid_offer,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    <b>[
+                      <a>Active</a>]
+                    </b>
+                  </t>
+                  <t t-if='not login_user_have_auto_bid'>
+                    <t t-esc="wk_auction.currency_id._convert(login_user_have_auto_bid.bid_offer,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                    <b>[
+                      <a>InActive</a>]
+                    </b>
+                  </t>
+                </span>
+              </div>
+              <div class="row ml0 mr0" t-if='website.publish_total_bids'>
+                <span class='span_auction_details_title col-md-6'>Totals Bid -</span>
+                <span class='col-md-6'>
+                  <a class='span_total_bids' t-att-href="'/product/auction/'+str(wk_auction.id)">
+                    <t t-esc='wk_auction.total_bids'/> Bids
+                  </a>
+                </span>
+              </div>
+            </div>
+            <div class="modal-footer" style='border-top:0px;'>
+              <button type="button" class="btn btn-default" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="inherited_website_product_auction" name="website auction"
+      inherit_id="website_sale.product">
+      <xpath expr="//form[@action='/shop/cart/update']" position="before">
+        <div id='#getting-started'>
+          <span id="clock"></span>
+        </div>
+        <div id='wk_auction_status'>
+          <t t-call='website_auction.deafult_msz'/>
+          <t t-if="auction_yet_not_running and website.publish_start_date">
+            <div  id='auction_start_at' class="auction_running">
+              <div>
+                <span class='span_auction_title'>Auction Starts At:</span>
+              </div>
+              <div class='col-md-12 card-header border countdown p-3'  style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;"
+                      t-att-data-wk_time_left='wk_auction.start_date'
+                     t-att-data-wk_auction_state='wk_auction.state'>
+                <t t-call='website_auction.countdown'/>
+                <br/>
+                <span class="sapn_auction_till"> &#160; On
+                  <span id="auction_start_week_left_public" t-att-data-start-date="auction_start_week_left">
+                    <t t-esc='auction_start_week_left'/>
+                  </span>
+                </span>
+              </div>
+            </div>
+          </t>
+          <t t-if="auction_yet_not_finish and website.publish_end_date">
+            <div id='auction_end_on'
+                    t-att-class="'auction_running' if wk_auction.state in ['running','extend'] else 'auction_stop'">
+              <div>
+                <span class='span_auction_title'>
+                  <t t-if="wk_auction.state == 'running'">Auction Ends In</t>
+                  <t t-if="wk_auction.state != 'running'">Auction Ends On</t>
+                </span>
+              </div>
+              <div class='col-md-12 card-header border countdown p-3' style="box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;"
+                      t-att-data-wk_time_left='wk_auction.end_date if wk_auction.state!="extend" else wk_auction.extend_date'
+                      t-att-data-wk_auction_state='wk_auction.state'>
+                <t t-call='website_auction.countdown'/>
+                <br/>
+                <div t-if='wk_auction.state in ["extend"] and website.publish_extend_date'
+                          class=' alert alert-warning bid_extende_alert' style='padding:0px;'>
+                  <span class='span_extended_time' >Bid Duration Has Been  Extended ,
+                    <span class='span_extended_time_hurry'>Hurry Up!</span>
+                  </span>
+                </div>
+                <span class="sapn_auction_till" > &#160;
+                  <t t-if="auction_running_extend">Till</t>
+                  <span id="auction_week_left_public" t-att-data-date="auction_week_left">
+                    <t t-esc='auction_week_left'/>
+                  </span>
+                </span>
+              </div>
+            </div>
+            <t t-call='website_auction.bids'/>
+            <t t-call='website_auction.place_bid'/>
+           </t>
+          <t t-call='website_auction.status_msz'/>
+          <t t-call='website_auction.details_watchlist'/>
+          <t t-call='website_auction.buy_now'/>
+          <t t-call='website_auction.details_model'/>
+        </div>
+      </xpath>
+
+      <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
+        <attribute name="t-if">product.auction_product_sale and product._is_add_to_cart_possible()</attribute>
+      </xpath>
+      <xpath expr="//div[@id='product_details']//p[@t-else='']" position="replace">
+        <p t-elif="not product._is_add_to_cart_possible()" class="alert alert-warning">This product has no valid combination.</p>
+      </xpath>
+      <!-- <xpath expr="//div[@id='product_detail_main']//h1[@t-field='product.name']" position="replace">
+          <t t-if="product.tmpl_auction_ids">
+            <t t-if="product.tmpl_auction_ids[0]">
+              <h1 itemprop="name" t-field="product.tmpl_auction_ids[0].name">Product Name</h1>
+            </t>
+          </t>
+            <t t-else="">
+              <h1 itemprop="name" t-field="product.name">Product Name</h1>
+            </t>
+      </xpath> -->
+
+    </template>
+  </data>
+</odoo>

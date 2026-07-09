@@ -1,0 +1,281 @@
+.div_auction_or{
+background-color: white;
+text-align: center;
+position: relative;
+	top:-40px;
+	left:40px;
+	height: 20px;
+	width: 40px;
+	font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+     font-weight: 400;
+    color: #999999;
+    font-size: 16px;
+
+}
+.span_auction_or{
+
+	display: block;
+	padding: 3px;
+}
+.auction_running .span_time_digit{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 600;
+    color: #007FFF;
+    font-size: 31px;
+
+}
+.auction_stop .span_time_digit{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #777777;
+    font-size: 38px;
+
+
+ }
+.span_time_unit{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #252525;
+    font-size: 27px;
+    margin-right: 10px;
+    margin-left: 5px;
+
+}
+
+.sapn_auction_till{
+    /* font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; */
+    font-weight: 400;
+    color: #555555;
+    font-size: 15px;
+
+}
+
+.auction_amount{
+	padding-left: 0 !important;
+	padding-right: auto !important;
+    /* margin-top:10px !important; */
+
+}
+.span_auction_title{
+	font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #000000;
+    font-size: 16px;
+
+}
+
+
+
+
+.span_current_bid_amount{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #000000;
+    font-size: 25px;
+}
+.span_next_bid_title{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #555555;
+    font-size: 15px;
+
+}
+.span_next_bid_amount{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #555555;
+    font-size: 15px;
+
+}
+.span_total_bids{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #007FFF;
+    font-size: 16px;
+
+
+}
+.span_offer_bid_amount{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #252525;
+    font-size: 15px;
+
+}
+
+.span_buy_now_amount{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #252525;
+    font-size: 18px;
+
+
+}
+.btn_submit_auction,.btn_buy_now_auction{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #FFFFFF;
+    font-size: 16px;
+
+
+}
+.btn_buy_now_auction{
+    padding: 10px 40px;
+    /* margin-bottom: 15px; */
+}
+
+
+.span_auction_date{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #252525;
+    font-size: 16px;
+
+}
+.auction_status_msz{
+     font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    /*color: #FFFFFF;   */
+    font-size: 14px;
+}
+#auction-details-model .modal-header{
+    border-bottom:3px solid #252525;
+    margin-bottom: 2%;
+}
+#auction-details-model .modal-body{
+    padding:7% !important;
+}
+.span_auction_details_model_title{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 600;
+    color: #252525;
+    font-size: 20px;
+
+}
+.span_auction_details_title{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #252525;
+    font-size: 16px;
+}
+.icon-cross-auction{
+    background:  url("/website_auction/static/src/img/icon-cross.png") no-repeat ;
+    padding-left: 18px;
+    height: 20px;
+
+}
+.span_extended_time{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #777777;
+    font-size: 17px;
+
+
+}
+.span_extended_time_hurry{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #E85757;
+    font-size: 17px;
+
+
+}
+.span_extend_time_digit{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #007FFF;
+    font-size: 17px;
+
+}
+.span_extend_time_unit{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 400;
+    color: #252525;
+    font-size: 17px;
+
+
+}
+/* .product_bids .oe_product{
+    padding: 1%;
+} */
+.bids_msz{
+    padding: 1%;
+    height: 40px;
+    margin: 0px  5px 40px;
+    font-weight: 300; font-size: 20px;
+
+}
+
+/* .winner_msz {
+padding:8px;font-weight: 300; font-size: 20px;
+
+} */
+/* .product_bids .oe_product:nth-last-child(1){
+    width: 29%;
+} */
+.product_bids hr{
+      border-style: solid;
+    border-color: #252525;
+    border-width: 3px 0 0 0;
+}
+.div_auction_details{
+    padding-bottom: 10px;
+}
+.div_place_bid{
+
+     /* border:3px solid #60B65A; */
+     border:3px solid #bcc0c4;
+     padding:10px;
+     margin-top: 10px;
+     padding-bottom: 30px;
+
+
+}
+.category_page_timer{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    color: #808080;
+    font-size: 13px;
+
+}
+.category_page_timer *{
+    font-size: 14px !important;
+    margin-left: 1px !important;
+    margin-right:0px !important;
+
+
+}
+.auction_error{
+       font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+}
+.auction_details_product > a > span > img{
+max-width: 60%;
+max-height: 100%;
+display: block;
+margin: auto;
+/*position: absolute;*/
+ top: 0;
+left: 0;
+bottom: 0;
+right: 0;
+
+}
+.product_bids *.auction_status_msz{
+    font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-weight: 700;
+    /*color: #FFFFFF;   */
+    font-size: 13px;
+
+}
+
+@media (max-width:767px) {
+    .btn_submit_auction{
+        margin-top: 16px;
+
+    }
+
+    .auction_amount + .col-md-6 {
+        padding-left: 0px;
+    }
+}

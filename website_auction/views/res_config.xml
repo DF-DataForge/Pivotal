@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="website_auction_config_settings_form" model="ir.ui.view">
+            <field name="name">Webkul Website Addons Setting</field>
+            <field name="model">website.auction.config</field>
+            <field name="arch" type="xml">
+               <form string="Webkul Website Addons Settings" class="oe_form_configuration">
+                    <header  class="col-md-12" style="position:fixed;z-index:10" >
+                        <button string="Apply" type="object" name="execute" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" type="object" name="cancel" class="oe_link"/>
+                    </header>
+                    <div style="height:10px;">
+                    </div>
+                    <group  string="Website Published Infomation">
+                        <group>
+                            <field name='default_publish_start_date'/>
+                            <field name='default_publish_extend_date'/>
+                            <field name='default_publish_end_date'/>
+                            <field name='default_publish_intial_price'/>
+                            <field name='default_publish_current_price'/>
+                            <field name='default_publish_next_bid'/>
+
+                        </group>
+                        <group>
+                            <field name='default_publish_user_highest_bid'/>
+                            <field name='default_publish_user_auto_bid'/>
+                            <field name='default_publish_total_bids'/>
+                            <field name='default_publish_info_link'/>
+                            <field name='default_publish_subscribe_link'/>
+                            <field name='default_publish_simple_bid'/>
+                            <field name='default_publish_auto_bid'/>
+                        </group>
+                       <group>
+                         <field name='default_publish_bidders_name' col="2" cols="4"/>
+                        <field name='default_publish_winner_name'  col="2" cols="4"/>
+                        </group>
+                         <group>
+                            <field name='default_publish_bid_record' />
+
+                         </group>
+
+                    </group>
+                    <group>
+                        <group>
+                                <label for="default_publish_auction_complete"  string="Auction Complete" />
+                                <div>
+                                    <field name='default_publish_auction_complete'/>
+                                    <field name="default_auction_complete_msz"  invisible="default_publish_auction_complete != True"  required="default_publish_auction_complete == True"/>
+                                </div>
+
+                                 <label for="default_publish_auction_close"  string="Auction Close"/>
+                                <div>
+                                    <field name='default_publish_auction_close'/>
+                                    <field name="default_auction_close_msz" invisible="default_publish_auction_close != True"  required="default_publish_auction_close == True"/>
+                                </div>
+
+                                 <label for="default_publish_unexpected_error"  string="Unexpected Error"/>
+                                <div>
+                                    <field name='default_publish_unexpected_error'/>
+                                    <field name="default_publish_unexpected_error_msz" invisible="default_publish_unexpected_error != True"  required="default_publish_unexpected_error == True"/>
+                                </div>
+
+
+                                 <label for="default_publish_min_bid_error"  string="Minimum Bid Error"/>
+                                <div>
+                                    <field name='default_publish_min_bid_error'/>
+                                    <field name="default_publish_min_bid_error_msz"  invisible="default_publish_min_bid_error != True"  required="default_publish_min_bid_error == True"/>
+                                </div>
+
+
+                                 <label for="default_publish_min_autobid_error"  string="Minimum Auto Bid Error"/>
+                                <div>
+                                    <field name='default_publish_min_autobid_error' />
+                                    <field name="default_publish_min_autobid_error_msz"  invisible="default_publish_min_autobid_error != True"  required="default_publish_min_autobid_error == True"/>
+                                </div>
+
+
+                            </group>
+                            <group>
+                            <label for="default_publish_login_first"  string="Login First"/>
+                                <div>
+                                    <field name='default_publish_login_first'/>
+                                    <field name="default_publish_login_first_msz"  invisible="default_publish_login_first != True"  required="default_publish_login_first == True"/>
+                                </div>
+
+                                 <label for="default_auction_bid_submitted"  string="Bid Placed"/>
+                                <div>
+                                    <field name='default_auction_bid_submitted'/>
+                                    <field name="default_auction_bid_submitted_msz"  invisible="default_auction_bid_submitted != True"  required="default_auction_bid_submitted == True"/>
+                                </div>
+
+                                 <label for="default_publish_bid_subscribe"  string="Notification Subscribe"/>
+                                <div>
+                                    <field name='default_publish_bid_subscribe'/>
+                                    <field name="default_publish_bid_subscribe_msz"  invisible="default_publish_bid_subscribe != True"  required="default_publish_bid_subscribe == True"/>
+                                </div>
+
+                                 <label for="default_publish_bid_unsubscribe"  string="Notification Un-Subscribe"/>
+                                <div>
+                                    <field name='default_publish_bid_unsubscribe'/>
+                                    <field name="default_publish_bid_unsubscribe_msz"  invisible="default_publish_bid_unsubscribe != True"  required="default_publish_bid_unsubscribe == True"/>
+                                </div>
+
+
+                            </group>
+                        </group>
+                   <group>
+                        <group string="Expire Notification[Admin]">
+                                <field name='default_notify_before_expire'/>
+                                <label for="default_notify_before" string="Notify Auction Need to Extend Before" invisible="default_notify_before_expire != True" />
+                                <div invisible="default_notify_before_expire != True" >
+                                    <field name="default_notify_before" class="oe_inline" required="default_notify_before_expire == True" />
+                                    <field name="default_notify_time_uom" class="oe_inline" required="default_notify_before_expire == True"/>
+                                </div>
+                        </group>
+
+                         <group string="Notify Auto Bidder">
+                            <field name="default_notify_ab_bid_placed"/>
+                            <field name="default_notify_ab_bid_overbid"/>
+                         </group>
+
+                         <group string="Notify Subscriber">
+                            <field name="default_notify_s_auction_running"/>
+                            <field name="default_notify_s_auction_extended"/>
+                            <field name="default_notify_s_auction_closed"/>
+                            <field name="default_notify_s_new_bid"/>
+                            <field name="default_notify_s_auction_completed"/>
+
+                         </group>
+
+                          <group string="Miscellaneous Setting">
+                            <field name="default_notify_w_auction_completed"/>
+                            <field name="default_notify_l_auction_completed"/>
+                            <field name='default_buynow_option'/>
+                         </group>
+                    </group>
+
+                    <div style="height:10px;">
+                    </div>
+                </form>
+            </field>
+        </record>
+        <record id="action_website_auction_config_settings" model="ir.actions.act_window">
+            <field name="name">Auction Configuration</field>
+            <field name="res_model">website.auction.config</field>
+            <field name="view_mode">form</field>
+            <field name="target">inline</field>
+        </record>
+
+
+        <record id = "website_auction_configuration_installer_todo" model = "ir.actions.todo">
+            <field name = "action_id" ref = "action_website_auction_config_settings"/>
+            <field name = "sequence">13</field>
+            <field name = "type">automatic</field>
+        </record>
+
+        <menuitem id="menu_website_auction_config_settings"
+                parent="website.menu_website_configuration"
+                action="action_website_auction_config_settings"
+                sequence="218" name="Auction Configuration"/>
+
+    </data>
+</odoo>

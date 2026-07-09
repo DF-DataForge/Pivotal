@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>    
+    <record id="ir_cron_action_synchronize_auction_state" model="ir.cron">
+      <field name="name">Synchronize Auction State</field>
+      <field eval="True" name="active"/>
+      <field name="user_id" ref="base.user_root"/>
+      <field name="interval_number">1</field>
+      <field name="interval_type">minutes</field>
+      <field name="numbercall">-1</field>
+      <field eval="'wk.website.auction'" name="model_name"/><!-- //model-->
+      <field name="model_id" ref="website_auction.model_wk_website_auction"/>
+      <field name="state">code</field>
+      <field name="code">model.synchronize_auction_state_cron()</field>
+    </record>
+  </data>
+</odoo>
