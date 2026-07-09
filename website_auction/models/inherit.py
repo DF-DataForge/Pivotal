@@ -8,6 +8,7 @@
 from dateutil import relativedelta
 from datetime import date, datetime
 import logging
+from markupsafe import Markup
 from pytz import timezone
 from time import localtime
 from odoo import api, fields, models, _
@@ -17,7 +18,7 @@ from odoo.http import request
 _logger = logging.getLogger(__name__)
 DateTimeFomat = '%Y-%m-%d %H:%M:%S'
 
-class ProductProduct(models.Model):
+class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
 
@@ -28,7 +29,6 @@ class ProductProduct(models.Model):
             lambda auction_id:str(auction_id.state) not in not_state
         )
         if auctions:
-            auctions.clear_caches()
             return auctions[0]
 
 
@@ -151,7 +151,6 @@ class Website(models.Model):
 
     def _get_auction_time_left_countdown(self,auction_obj):
         auction_obj.sudo().set_auction_state()
-        #auction_obj.clear_caches()
         result=""
         if auction_obj:
             current =datetime.now().replace(microsecond=0)
@@ -173,7 +172,7 @@ class Website(models.Model):
             result +="<span class='span_time_digit'>{hour:02d}</span><span class='span_time_unit'>h. </span>".format(hour=hour)
             result +="<span class='span_time_digit'>{minute:02d}</span><span class='span_time_unit'>m. </span>".format(minute=minute)
             result += "<span class='span_time_digit'>{second:02d}</span><span class='span_time_unit'>s. </span>".format(second=second)
-        return result
+        return Markup(result)
 
 
     def _get_auction_start_time_left_countdown(self,auction_obj):
@@ -189,8 +188,7 @@ class Website(models.Model):
             result +="<span class='span_time_digit'>{hour:02d}</span><span class='span_time_unit'>h. </span>".format(hour=diff.hours >=1 and diff.hours or 0)
             result +="<span class='span_time_digit'>{minute:02d}</span><span class='span_time_unit'>m. </span>".format(minute=diff.minutes>=1 and diff.minutes or 0)
             result += "<span class='span_time_digit'>{second:02d}</span><span class='span_time_unit'>s. </span>".format(second=diff.seconds>=1 and diff.seconds or 0)
-        auction_obj.clear_caches()
-        return result
+        return Markup(result)
     
 
     def _get_next_bid(self,auction_obj):

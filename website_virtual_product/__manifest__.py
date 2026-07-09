@@ -17,7 +17,7 @@
   "name"                 :  "Website Extra Order Line",
   "summary"              :  """Add an extra line on Website Sales Order, this module is used by other modules like loyalty module, etc.""",
   "category"             :  "Website",
-  "version"              :  "1.0.0",
+  "version"              :  "19.0.1.0.0",
   "sequence"             :  1,
   "author"               :  "Webkul Software Pvt. Ltd.",
   "maintainer"           :  "Prakash Kumar",

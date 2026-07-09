@@ -246,8 +246,12 @@ class WkWebsiteAuction(models.Model):
 
     @api.model
     def wk_activate_website_view(self):
-        products_description = self.env.ref('website_sale.products_description')
-        products_description.write(dict(active=1))
+        # 'website_sale.products_description' was removed in Odoo 17.2+;
+        # product tile descriptions are handled by shop design options now.
+        products_description = self.env.ref(
+            'website_sale.products_description', raise_if_not_found=False)
+        if products_description:
+            products_description.write(dict(active=1))
         return True
 
     @api.model

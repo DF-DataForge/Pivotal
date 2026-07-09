@@ -71,51 +71,51 @@
             <record id= "product_wk_website_auction_tree_view" model= "ir.ui.view">
                 <field name= "name">wk.website.auction.tree</field>
                 <field name= "model">wk.website.auction</field>
-                <field name="type">tree</field>
+                <field name="type">list</field>
                 <field name= "arch" type= "xml">
-                    <tree string="My tree View" > 
+                    <list string="Auction List" >
                         <field name= "sequence"  widget="handle"/>
                         <field name= "name"/>
                         <field name= "current_price"/>
                         <field name= "state"/>
-                    </tree>
+                    </list>
                 </field>
             </record>
 
              <record id= "wk_bid_increment_rule_tree_view" model= "ir.ui.view">
                 <field name= "name">wk.bid.increment.rule.tree</field>
                 <field name= "model">wk.bid.increment.rule</field>
-                <field name="type">tree</field>
+                <field name="type">list</field>
                 <field name= "arch" type= "xml">
-                    <tree string="Increment  Rules" >
+                    <list string="Increment  Rules">
                         <field name= "name"/>
                         <field name= "from_price"/>
                         <field name= "to_price"/>
                         <field name= "increment_by"/>
-                    </tree>
+                    </list>
                 </field>
             </record>
              <record id= "wk_auction_bidders_tree_view" model= "ir.ui.view">
                 <field name= "name">wk.auction.bidder.tree</field>
                 <field name= "model">wk.auction.bidder</field>
-                <field name="type">tree</field>
+                <field name="type">list</field>
                 <field name= "arch" type= "xml">
-                    <tree string="Auction Bidders" create="false"> 
+                    <list string="Auction Bidders" create="false"> 
                         <field name= "partner_id"/>
                         <field name= "auction_fk"/>
                         <field name= "bid_offer"/>
                         <field name= "bid_type"/>
                         <field name= "state"/>
-                    </tree>
+                    </list>
                 </field>
             </record>
 
              <record id= "wk_auction_subscribers_tree_view" model= "ir.ui.view">
                 <field name= "name">wk.auction.subscriber.tree</field>
                 <field name= "model">wk.auction.subscriber</field>
-                <field name="type">tree</field>
+                <field name="type">list</field>
                 <field name= "arch" type= "xml">
-                    <tree string="Auction Subscribers">
+                    <list string="Auction Subscribers">
 
 
                         <field name= "partner_id"/>
@@ -123,7 +123,7 @@
                         <field name= "email"/>
                         <field name= "wk_auction_fk"/>
                         <field name= "create_date" string='Subscribe on'/>
-                    </tree>
+                    </list>
                 </field>
             </record>
 
@@ -146,15 +146,8 @@
                             <button name="action_close_auction" string="Closed" type="object" class="oe_highlight"
                                     invisible="state not in ('running', 'extend')"/>
                                 <button name="action_finish_auction" string="Order Attached" type="object" class="oe_highlight"
-                                  invisible="state not in ('complete') and order_id not in ('False')" />
-                            <field name="state" widget="statusbar" statusbar_colors='{
-                                                    "draft":"blue",
-                                                    "confirmed":"blue",
-                                                    "running":"red",
-                                                    "extend":"red",
-                                                    "close":"red",
-                                                    "complete":"red"
-                                                    }'/>
+                                  invisible="state != 'complete' or not order_id" />
+                            <field name="state" widget="statusbar"/>
                         </header>
                         <sheet>
                          <group>
@@ -324,19 +317,14 @@
                     <form string="Bidders" create="false" >
                         <header>
                                 <field name="state"
-                                    widget="statusbar"
-                                    statusbar_colors='{
-                                        "loss":"red",
-                                        "active":"blue",
-                                        "win":"green",
-                                    }'/>
+                                    widget="statusbar"/>
 
                          </header>
                         <sheet>
                             <group>
                                 <group>
                                      <field name='partner_id'/>
-                                    <field name='name' hidden="1"/>
+                                    <field name='name' invisible="1"/>
                                 </group>
                                 <group>
                                    <field name='auction_fk'  invisible="'only_with_form' not in context"/>
@@ -359,7 +347,7 @@
                             <group>
                                 <group>
                                      <field name='partner_id'/>
-                                    <field name='name' hidden="1"/>
+                                    <field name='name' invisible="1"/>
                                     <field name= "email"/>
                                 </group>
                                 <group>
@@ -379,7 +367,7 @@
                 <field name="name">Working Auction</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">wk.website.auction</field>
-                 <field name="view_mode">tree,form</field>
+                 <field name="view_mode">list,form</field>
                  <field name="domain">[('state','not in',['close','complete','finish'])]</field>
 
                 <field name="view_id" ref="product_wk_website_auction_tree_view"/>
@@ -394,7 +382,7 @@
                 <field name="name">Completed Auction</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">wk.website.auction</field>
-                 <field name="view_mode">tree,form</field>
+                 <field name="view_mode">list,form</field>
                  <field name="domain">[('state','in',['close','complete','finish'])]</field>
                  <field name="context">{'auction_type':'completed','search_default_group_product_sale':1}</field>
                 <field name="view_id" ref="product_wk_website_auction_tree_view"/>
@@ -404,14 +392,14 @@
                 <field name="name">Bid Increment Rules</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">wk.bid.increment.rule</field>
-                 <field name="view_mode">tree,form</field>
+                 <field name="view_mode">list,form</field>
                 <field name="view_id" ref="wk_bid_increment_rule_tree_view"/>
             </record>
             <record id="wk_auction_bidders_action" model="ir.actions.act_window">
                 <field name="name">Auction Bidders</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">wk.auction.bidder</field>
-                 <field name="view_mode">tree,form</field>
+                 <field name="view_mode">list,form</field>
                  <field name="context">{'search_default_group_wk_auction_filter':1,'only_with_form':1}</field>
                 <field name="view_id" ref="wk_auction_bidders_tree_view"/>
             </record>
@@ -420,7 +408,7 @@
                 <field name="name">Auction Subscribers</field>
                 <field name="type">ir.actions.act_window</field>
                 <field name="res_model">wk.auction.subscriber</field>
-                 <field name="view_mode">tree,form</field>
+                 <field name="view_mode">list,form</field>
                  <field name="context">{'search_default_group_wk_auction_filter':1,'only_with_form':1}</field>
                 <field name="view_id" ref="wk_auction_subscribers_tree_view"/>
             </record>

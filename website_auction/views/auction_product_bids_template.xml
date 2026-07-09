@@ -34,12 +34,12 @@
                       </div>
                         <div class='row'  t-if='website.publish_intial_price'><span class='span_auction_details_title col-md-6'>Auction Base Price -</span>
                           <span class='span_auction_date col-md-6'>
-                            <t t-esc="wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.intial_price,website.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                           </span>
                       </div>
                       <div class='row' t-if='website.publish_current_price'><span class='span_auction_details_title col-md-6'>Current Bid -</span>
                           <span class='span_auction_date col-md-6'>
-                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,website.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,website.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                           </span>
                       </div>
                       <div class='row' t-if="website.publish_winner_name and wk_auction.state in ['complete','finish']"><span class='span_auction_details_title col-md-6'>Winner/Bid -</span>
@@ -48,19 +48,19 @@
                           <!-- <t t-if="wk_auction.get_auction_config_settings_vals().get('publish_bidders_name') == 'cross'"> -->
                             <span class='span_auction_date col-md-6'>
                             <t t-esc="wk_auction.cross_name(wk_auction.winner_id,'winner')" />
-                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,website.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,website.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                             </span>
                           <!-- </t>
                           <t t-else="">
                             <span class='span_auction_date col-md-6'>
                             <t t-esc="wk_auction.winner_id.name" />
-                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <t t-esc="wk_auction.currency_id._convert(wk_auction.current_price,website.currency_id,request.env.company,datetime.datetime.now()) or wk_auction.currency_id._convert(wk_auction.intial_price,website.currency_id,request.env.company,datetime.datetime.now())" t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                           </span>
                           </t> -->
                       </div>
                       <div class='row' t-if='website.publish_user_highest_bid'><span class='span_auction_details_title col-md-6'>Your Highest Bid -</span>
                           <span class='span_auction_date col-md-6'>
-                            <t t-esc="wk_auction.currency_id._convert(website._get_partner_heighest_bid(wk_auction),request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
+                            <t t-esc="wk_auction.currency_id._convert(website._get_partner_heighest_bid(wk_auction),website.currency_id,request.env.company,datetime.datetime.now()) " t-options="{'widget': 'monetary', 'display_currency': website.currency_id}"/>
                           </span>
                       </div>
                     </div>
@@ -82,7 +82,7 @@
                             <t t-esc='wk_auction.cross_name(bidder.partner_id,"bidders")'/>
                         </td>
                         <td>
-                          <t t-esc="wk_auction.currency_id._convert(bidder.bid_offer,request.website.pricelist_id.currency_id,request.env.company,datetime.datetime.now()) " />
+                          <t t-esc="wk_auction.currency_id._convert(bidder.bid_offer,website.currency_id,request.env.company,datetime.datetime.now()) " />
                         </td>
                         <td><t t-esc='bidder.create_date'/></td>
                       </tr>

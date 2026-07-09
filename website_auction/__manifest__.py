@@ -17,7 +17,7 @@
   "name"                 :  "Website Auction",
   "summary"              :  """The admin can now host online auction for different products on his Odoo website. The buyer bid on the products and highest bid win when the timer runs out.""",
   "category"             :  "Website",
-  "version"              :  "1.0.0",
+  "version"              :  "19.0.1.0.0",
   "sequence"             :  1,
   "author"               :  "Webkul Software Pvt. Ltd.",
   "license"              :  "Other proprietary",
@@ -38,7 +38,7 @@ Online car auction
 Website auction
 Host auction
 Odoo auction""",
-  "live_test_url"        :  "http://odoodemo.webkul.com/?module=website_auction&version=14.0&custom_url=/shop",
+  "live_test_url"        :  "http://odoodemo.webkul.com/?module=website_auction&version=19.0&custom_url=/shop",
   "depends"              :  [
                              'website_sale',
                              'sale_stock',
