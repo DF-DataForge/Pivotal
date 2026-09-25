@@ -5,7 +5,7 @@
 	<data>
 
 		<template id="inherited_website_virtual_product" name="website.virtual.product.template" inherit_id="website_virtual_product.inherited_website_sale_cart_website_virtual_product" >
-			<xpath expr="//div//span[hasclass('span_is_virtual')]" position="attributes" t-if="line.is_virtual">
+			<xpath expr="//span[hasclass('span_is_virtual')]" position="attributes">
 				<attribute name="t-att-style">'display: none;'if line.virtual_source=='wk_website_auction' else ''</attribute>
 			</xpath>
     	</template>

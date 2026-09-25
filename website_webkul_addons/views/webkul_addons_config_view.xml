@@ -16,7 +16,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%;">Serial No.</th>
                                     <th style="width:45%;">Module Name</th>
@@ -43,7 +43,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%%;">Serial No.</th>
                                     <th style="width:45%%;">Module Name</th>
@@ -102,7 +102,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%%;">Serial No.</th>
                                     <th style="width:45%%;">Module Name</th>
@@ -130,7 +130,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%%;">Serial No.</th>
                                     <th style="width:45%%;">Module Name</th>
@@ -339,7 +339,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%%;">Serial No.</th>
                                     <th style="width:45%%;">Module Name</th>
@@ -469,7 +469,7 @@
                             </u>
                         </center>
                         <table class="table table-striped">
-                            <thead class="thead-dark">
+                            <thead class="table-dark">
                                 <tr>
                                     <th style="width:15%%;">Serial No.</th>
                                     <th style="width:45%%;">Module Name</th>

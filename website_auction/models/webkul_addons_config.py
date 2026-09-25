@@ -30,7 +30,7 @@ class WebkulWebsiteAddons(models.TransientModel):
             'name': action.name,
             'help': action.help,
             'type': action.type,
-            'views': [[list_view_id, 'tree'], [form_view_id, 'form']],
+            'views': [[list_view_id, 'list'], [form_view_id, 'form']],
             'target': action.target,
             'context': action.context,
             'res_model': action.res_model,

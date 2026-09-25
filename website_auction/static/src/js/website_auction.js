@@ -47,15 +47,14 @@ $(document).ready(function() {
   }
 
   if (window.location.pathname.includes("/shop/product")) {
+    // moment.js is no longer shipped with Odoo: format with luxon
+    // (deserializeDateTime returns a luxon DateTime in the user timezone).
     var span1 = $(this).find("#auction_week_left_public");
     if (span1) {
       var date = $("#auction_week_left_public").data("date");
       try {
-        var new_date = moment(deserializeDateTime(date)).format(
-          "DD-MMM-YYYY,h:mmA"
-        );
-        var day = moment(deserializeDateTime(date)).format("dddd");
-        $("#auction_week_left_public").text(day + " " + new_date);
+        var new_date = deserializeDateTime(date).toFormat("cccc dd-MMM-yyyy, h:mma");
+        $("#auction_week_left_public").text(new_date);
       } catch (e) {
         console.log(e);
       }
@@ -64,11 +63,8 @@ $(document).ready(function() {
     if (span2) {
       var date = $("#auction_start_week_left_public").data("start-date");
       try {
-        var new_date = moment(deserializeDateTime(date)).format(
-          "DD-MMM-YYYY,h:mmA"
-        );
-        var day = moment(deserializeDateTime(date)).format("dddd");
-        $("#auction_start_week_left_public").text(day + " " + new_date);
+        var new_date = deserializeDateTime(date).toFormat("cccc dd-MMM-yyyy, h:mma");
+        $("#auction_start_week_left_public").text(new_date);
       } catch (e) {
         console.log(e);
       }

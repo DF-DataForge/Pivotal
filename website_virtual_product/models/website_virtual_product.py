@@ -21,7 +21,7 @@ class WebsiteVirtualProduct(models.Model):
 			'order_id':order_id,
 			'product_id':product_id.id,
 			'name':kwags.get('name') or product_id.name,
-			'product_uom':product_id.uom_id.id,
+			'product_uom_id':product_id.uom_id.id,
 			'product_uom_qty': kwags.get('product_uom_qty',1),
 			'price_unit':kwags.get('product_price'),
 			'redeem_points':kwags.get('redeem_points',0),

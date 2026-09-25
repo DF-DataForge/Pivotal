@@ -102,11 +102,12 @@ class WkAuctionSubscriber(models.Model):
                 )
 
 
-    @api.model
-    def create(self, vals):
-        result = super(WkAuctionSubscriber, self).create(vals)
-        result.deactivate_token = str(uuid.uuid4())+str(result.id)
-        return result
+    @api.model_create_multi
+    def create(self, vals_list):
+        results = super(WkAuctionSubscriber, self).create(vals_list)
+        for result in results:
+            result.deactivate_token = str(uuid.uuid4())+str(result.id)
+        return results
 
     @api.depends('subscribe')
     def change_deactivate_token(self):
@@ -167,7 +168,7 @@ class WkAuctionBidder(models.Model):
         string='Offer DateTime',
         help='Datetime when user made the Last Bids',
         required=True,
-        default=fields.Datetime.now()
+        default=fields.Datetime.now
     )
     bid_type = fields.Selection(
         string='Bid Type',

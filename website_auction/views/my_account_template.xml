@@ -68,10 +68,10 @@
                                     </td>
                                     <td><span t-esc="auction.get_auction_end_date()"/></td>
                                     <t t-if='auction.state=="complete"'>
-                                      <td t-if='website.sale_get_order()'>
+                                      <td t-if='request.cart'>
                                       <a t-att-href="'/auction/cart/update/'+str(auction.id)" class="btn btn-sm btn-primary">Add To Cart</a>
                                       </td>
-                                      <td t-if='not website.sale_get_order()'>
+                                      <td t-if='not request.cart'>
                                         <a  t-att-href="'/auction/cart/create/'+str(auction.id)" class="btn btn-sm btn-primary">Check Out <i class="fa fa-arrow-right"></i></a>
                                       </td>
                                     </t>

@@ -7,11 +7,11 @@
 #################################################################################
 from . import controllers
 from . import models
-def pre_init_check(cr):
+def pre_init_check(env):
 	from odoo.service import common
 	from odoo.exceptions import UserError
 	version_info = common.exp_version()
 	server_serie =version_info.get('server_serie')
-	if server_serie!='17.0':
-		raise UserError('Module support Odoo series 17.0 found {}.'.format(server_serie))
+	if server_serie!='19.0':
+		raise UserError('Module support Odoo series 19.0 found {}.'.format(server_serie))
 	return True

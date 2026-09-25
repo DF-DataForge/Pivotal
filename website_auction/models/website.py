@@ -7,7 +7,7 @@
 ##########################################################################
 
 from odoo import api, fields, models, _
-from odoo.osv import expression
+from odoo.fields import Domain
 from odoo.http import request
 
 
@@ -29,7 +29,6 @@ class Website(models.Model):
 	publish_info_link = fields.Boolean(string='Auction Details Link',
 								default= 1)
 	publish_subscribe_link = fields.Boolean(string='Subscribe Link',
-								model = 'wk.website.auction',
 								default= 1)
 	publish_start_date = fields.Boolean(string='Start Date',
 								default= 1)
@@ -134,10 +133,11 @@ class Website(models.Model):
 
 
 	def _product_domain(self):
-		if request.context.get('auction') and request.context.get('live'):
-			# return [[('tmpl_auction_ids', '!=', False),'|',("tmpl_auction_ids.state","=","running"),("tmpl_auction_ids.state","=","extend")], super().
-			return ['&'] + super()._product_domain() + [('tmpl_auction_ids', '!=', False),'|',("tmpl_auction_ids.state","=","running"),("tmpl_auction_ids.state","=","extend")]
-		elif request.context.get('auction') and not request.context.get('live'):
-			return expression.AND([[('tmpl_auction_ids', '!=', False),("tmpl_auction_ids.state","=","confirmed")], super()._product_domain()])
-		else:
-			return super()._product_domain()
+		domain = super()._product_domain()
+		if self.env.context.get('auction'):
+			if self.env.context.get('live'):
+				auction_domain = [('tmpl_auction_ids', '!=', False), ('tmpl_auction_ids.state', 'in', ['running', 'extend'])]
+			else:
+				auction_domain = [('tmpl_auction_ids', '!=', False), ('tmpl_auction_ids.state', '=', 'confirmed')]
+			return Domain.AND([domain, auction_domain])
+		return domain
