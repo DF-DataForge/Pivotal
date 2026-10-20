@@ -1,5 +1,8 @@
 # Dagboek overzetten tussen twee Odoo 19-databases
 
+> Dit kan ook rechtstreeks vanuit Odoo met de module `account_journal_transfer` in deze repository.
+> Het script hieronder is bedoeld voor wanneer je de module niet kunt installeren.
+
 Het script `transfer_journal.py` kopieert de diverse boekingen van één dagboek (bv. het
 afsluitdagboek **AFSL**) van een brondatabase naar een doeldatabase via XML-RPC.
 Je hebt enkel Python 3.10 of hoger nodig, zonder extra pakketten.

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_journal_transfer_wizard_form" model="ir.ui.view">
+        <field name="name">account.journal.transfer.wizard.form</field>
+        <field name="model">account.journal.transfer.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Dagboek overzetten">
+                <field name="state" invisible="1"/>
+                <field name="company_id" invisible="1"/>
+                <field name="can_transfer" invisible="1"/>
+                <sheet>
+                    <group invisible="state != 'config'">
+                        <group string="Brondatabase">
+                            <field name="source_url" placeholder="https://oude-database.odoo.com"/>
+                            <field name="source_db"/>
+                            <field name="source_login"/>
+                            <field name="source_password" password="True" required="state == 'config'"/>
+                            <field name="source_company"/>
+                            <field name="source_journal_code"/>
+                        </group>
+                        <group string="Overzetten naar">
+                            <field name="journal_id" options="{'no_create': True}"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="post_moves"/>
+                        </group>
+                        <group string="Opties">
+                            <field name="transfer_partners"/>
+                            <field name="drop_missing_partners" invisible="not transfer_partners"/>
+                            <field name="transfer_analytic"/>
+                            <field name="include_draft"/>
+                        </group>
+                    </group>
+                    <field name="report_html" invisible="state == 'config'" nolabel="1"/>
+                </sheet>
+                <footer>
+                    <button string="Controleren" name="action_check" type="object" class="btn-primary"
+                            invisible="state != 'config'" data-hotkey="q"/>
+                    <button string="Overzetten" name="action_transfer" type="object" class="btn-primary"
+                            invisible="state != 'checked' or not can_transfer" data-hotkey="v"
+                            confirm="De boekingen worden nu aangemaakt in deze database. Doorgaan?"/>
+                    <button string="Opnieuw controleren" name="action_check" type="object"
+                            invisible="state != 'checked'"/>
+                    <button string="Instellingen wijzigen" name="action_back" type="object"
+                            invisible="state != 'checked'"/>
+                    <button string="Toon boekingen" name="action_open_moves" type="object" class="btn-primary"
+                            invisible="state != 'done'"/>
+                    <button string="Sluiten" special="cancel" data-hotkey="z"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_account_journal_transfer_wizard" model="ir.actions.act_window">
+        <field name="name">Dagboek overzetten</field>
+        <field name="res_model">account.journal.transfer.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_account_journal_transfer_wizard_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem
+        id="menu_account_journal_transfer"
+        name="Dagboek overzetten"
+        action="action_account_journal_transfer_wizard"
+        parent="account.account_closing_menu"
+        sequence="90"
+        groups="account.group_account_manager"/>
+</odoo>
