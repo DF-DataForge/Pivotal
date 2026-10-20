@@ -152,6 +152,15 @@ class AccountJournalTransferWizard(models.TransientModel):
         help="Lijnen met een partner die hier niet gevonden wordt, worden zonder partner overgezet "
              "in plaats van de overzetting te blokkeren.",
     )
+    create_missing_partners = fields.Boolean(
+        "Ontbrekende partners aanmaken",
+        help="Partners die hier niet gevonden worden, worden aangemaakt met naam, btw-nummer, "
+             "referentie en e-mail uit de bron.",
+    )
+    create_missing_accounts = fields.Boolean(
+        "Ontbrekende rekeningen aanmaken",
+        help="Rekeningen die hier niet bestaan, worden aangemaakt met nummer, naam en type uit de bron.",
+    )
     transfer_analytic = fields.Boolean("Analytische verdeling overzetten", default=True)
     post_moves = fields.Boolean("Boekingen meteen boeken", help="Anders worden ze als concept aangemaakt.")
 
@@ -259,7 +268,7 @@ class AccountJournalTransferWizard(models.TransientModel):
 
         result = {
             "source": source, "source_journal": source_journal,
-            "rows": [], "todo": [], "errors": [], "warnings": [],
+            "rows": [], "todo": [], "errors": [], "warnings": [], "info": [],
             "created": self.env["account.move"],
         }
         mapping = _Mapping(self, source, result)
@@ -267,8 +276,23 @@ class AccountJournalTransferWizard(models.TransientModel):
             if move["move_type"] != "entry":
                 mapping.warn(f"{move['name']} is geen diverse boeking (type {move['move_type']}) en wordt overgeslagen.")
         moves = [m for m in moves if m["move_type"] == "entry"]
-        mapping.prepare(moves)
 
+        # Ook bij de controle alles echt aanmaken (rekeningen, partners, boekingen), maar in een
+        # savepoint dat wordt teruggedraaid: zo komen alle validaties van Odoo zelf al aan het licht.
+        try:
+            with self.env.cr.savepoint():
+                mapping.prepare(moves)
+                self._plan_moves(moves, mapping, result)
+                if not result["errors"]:
+                    result["created"] = self._create_moves(result)
+                if not apply or result["errors"]:
+                    raise _DryRun()
+        except _DryRun:
+            self.env.invalidate_all()
+            result["created"] = self.env["account.move"]
+        return result
+
+    def _plan_moves(self, moves, mapping, result):
         for move in moves:
             vals = mapping.move_vals(move)
             total = self._check_balanced(move, mapping)
@@ -280,23 +304,10 @@ class AccountJournalTransferWizard(models.TransientModel):
                 ("state", "!=", "cancel"),
             ], limit=1)
             row = {"name": move["name"], "date": move["date"], "lines": len(vals["line_ids"]),
-                   "total": total, "existing": existing}
+                   "total": total, "existing": existing.name}
             result["rows"].append(row)
             if not existing:
                 result["todo"].append((move, vals, row))
-
-        if not result["errors"]:
-            # Ook bij de controle echt aanmaken (en boeken), maar in een savepoint dat wordt
-            # teruggedraaid: zo komen alle validaties van Odoo zelf al aan het licht.
-            try:
-                with self.env.cr.savepoint():
-                    result["created"] = self._create_moves(result)
-                    if not apply or result["errors"]:
-                        raise _DryRun()
-            except _DryRun:
-                self.env.invalidate_all()
-                result["created"] = self.env["account.move"]
-        return result
 
     def _create_moves(self, result):
         created = self.env["account.move"]
@@ -343,10 +354,17 @@ class AccountJournalTransferWizard(models.TransientModel):
             "<p>Bron: <b>{}</b> / {} / {} — dagboek <b>{}</b> ({})</p>"
         ).format(source.url, source.db, source.company["name"],
                  result["source_journal"]["name"], result["source_journal"]["code"])
-        for message in result["errors"]:
-            html += Markup('<div class="alert alert-danger mb-1 py-1">{}</div>').format(message)
-        for message in result["warnings"]:
-            html += Markup('<div class="alert alert-warning mb-1 py-1">{}</div>').format(message)
+        applied = bool(result["created"])
+        sections = (
+            ("danger", "Op te lossen", result["errors"]),
+            ("warning", "Waarschuwingen", result["warnings"]),
+            ("info", "Aangemaakt" if applied else "Wordt aangemaakt bij het overzetten", result["info"]),
+        )
+        for level, title, messages in sections:
+            if messages:
+                items = Markup().join(Markup("<li>{}</li>").format(m) for m in messages)
+                html += Markup('<div class="alert alert-{} py-2"><b>{} ({})</b><ul class="mb-0">{}</ul></div>').format(
+                    level, title, len(messages), items)
 
         if not result["rows"]:
             return html + Markup("<p>Geen boekingen gevonden voor deze selectie.</p>")
@@ -354,7 +372,7 @@ class AccountJournalTransferWizard(models.TransientModel):
         body = Markup()
         for row in result["rows"]:
             if row["existing"]:
-                status = Markup("<span class='text-muted'>bestaat al ({})</span>").format(row["existing"].name)
+                status = Markup("<span class='text-muted'>bestaat al ({})</span>").format(row["existing"])
             elif row.get("new_name"):
                 status = Markup("<span class='text-success'>aangemaakt: {}</span>").format(row["new_name"])
             else:
@@ -403,6 +421,22 @@ class _Mapping:
         if message not in self.result["warnings"]:
             self.result["warnings"].append(message)
 
+    def info(self, message):
+        self.result["info"].append(message)
+
+    def _create(self, model, vals, label):
+        """Maakt een record aan; een validatiefout wordt een melding in plaats van een crash."""
+        try:
+            with self.env.cr.savepoint():
+                record = self.env[model].with_company(self.company).create(vals)
+                self.env.flush_all()
+        except (UserError, ValidationError) as exc:
+            self.env.invalidate_all()
+            self.error(f"{label} kon niet aangemaakt worden: {exc.args[0] if exc.args else exc}")
+            return False
+        self.info(label)
+        return record
+
     def _domain(self, model):
         return Domain(self.env[model]._check_company_domain(self.company))
 
@@ -421,41 +455,69 @@ class _Mapping:
 
     def _map_accounts(self, source_ids):
         Account = self.env["account.account"].with_company(self.company)
-        for account in self.source.read("account.account", source_ids, ["code", "name"]):
+        fields = ["code", "name", "account_type", "reconcile"]
+        for account in sorted(self.source.read("account.account", source_ids, fields), key=lambda a: a["code"]):
             found = Account.search(self._domain("account.account") & Domain("code", "=", account["code"]))
             if len(found) == 1:
                 self.accounts[account["id"]] = found.id
+            elif not found and self.wizard.create_missing_accounts:
+                new = self._create("account.account", {
+                    "code": account["code"], "name": account["name"],
+                    "account_type": account["account_type"], "reconcile": account["reconcile"],
+                }, f"Rekening {account['code']} ({account['name']})")
+                self.accounts[account["id"]] = new.id if new else False
             elif not found:
                 self.error(f"Rekening {account['code']} ({account['name']}) bestaat niet in deze database.")
             else:
                 self.error(f"Rekening {account['code']} komt meerdere keren voor in deze database.")
 
     def _map_partners(self, source_ids):
-        Partner = self.env["res.partner"].with_context(active_test=False)
-        domain = self._domain("res.partner")
-        for partner in self.source.read("res.partner", source_ids, ["name", "vat", "ref"]):
-            found = Partner
-            for field in ("vat", "ref"):
-                if partner[field]:
-                    found = Partner.search(domain & Domain(field, "=", partner[field]))
-                    if found:
-                        break
-            if not found:
-                found = Partner.search(domain & Domain("name", "=ilike", partner["name"]))
-            if len(found) > 1:
-                # Bij meerdere treffers: voorkeur voor het hoofdcontact (zonder parent).
-                top = found.filtered(lambda p: not p.parent_id)
-                found = top if len(top) == 1 else found
+        fields = ["name", "vat", "ref", "is_company", "email"]
+        source_partners = self.source.read("res.partner", source_ids, fields)
+        for partner in sorted(source_partners, key=lambda p: (p["name"] or "").lower()):
+            found = self._find_partner(partner)
             if len(found) == 1:
                 self.partners[partner["id"]] = found.id
                 continue
-            reason = "niet gevonden" if not found else f"{len(found)} mogelijke treffers"
-            message = f"Partner '{partner['name']}' (btw {partner['vat'] or '-'}): {reason} in deze database."
+            if not found and self.wizard.create_missing_partners:
+                new = self._create("res.partner", {
+                    "name": partner["name"], "vat": partner["vat"] or False, "ref": partner["ref"] or False,
+                    "is_company": partner["is_company"], "email": partner["email"] or False,
+                }, f"Partner '{partner['name']}'" + (f" (btw {partner['vat']})" if partner["vat"] else ""))
+                self.partners[partner["id"]] = new.id if new else False
+                continue
+            if found:
+                candidates = ", ".join(f"{p.display_name} [id {p.id}]" for p in found[:5])
+                reason = f"{len(found)} mogelijke treffers: {candidates}. Voeg deze contacten samen"
+            else:
+                reason = "niet gevonden in deze database"
+            message = f"Partner '{partner['name']}' (btw {partner['vat'] or '-'}): {reason}."
             if self.wizard.drop_missing_partners:
                 self.warn(message + " Wordt zonder partner overgezet.")
                 self.partners[partner["id"]] = False
             else:
                 self.error(message)
+
+    def _find_partner(self, partner):
+        Partner = self.env["res.partner"]
+        domain = self._domain("res.partner")
+        criteria = [(field, "=", partner[field]) for field in ("vat", "ref") if partner[field]]
+        criteria.append(("name", "=ilike", partner["name"]))
+        for criterion in criteria:
+            # Eerst bij de actieve contacten zoeken, pas daarna bij de gearchiveerde.
+            found = Partner.search(domain & Domain(*criterion)) \
+                or Partner.with_context(active_test=False).search(domain & Domain(*criterion))
+            if found:
+                break
+        if len(found) > 1:
+            # Contactpersonen en adressen van hetzelfde bedrijf: neem het bedrijf zelf.
+            commercial = found.commercial_partner_id
+            if len(commercial) == 1:
+                return commercial
+            top = found.filtered(lambda p: not p.parent_id)
+            if len(top) == 1:
+                return top
+        return found
 
     def _map_analytic(self, source_ids):
         Analytic = self.env["account.analytic.account"].with_context(active_test=False)

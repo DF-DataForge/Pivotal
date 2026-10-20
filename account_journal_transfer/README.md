@@ -23,6 +23,17 @@ wordt alleen gelezen, via XML-RPC.
 
 Koppelingen: rekeningen op rekeningnummer, partners op btw-nummer, dan referentie, dan naam,
 en analytische rekeningen op code of naam. Zolang er iets ontbreekt, wordt niets overgezet.
+
+- **Ontbrekende rekeningen aanmaken**: maakt rekeningen die hier niet bestaan aan, met nummer,
+  naam, type en afpunbaarheid uit de bron.
+- **Ontbrekende partners aanmaken**: maakt partners aan met naam, btw-nummer, referentie en
+  e-mail uit de bron.
+- Bij meerdere treffers voor een partner krijgen actieve contacten voorrang op gearchiveerde,
+  en het bedrijf zelf op zijn contactpersonen. Blijven er echte dubbels over, dan toont het
+  rapport welke, met hun id, zodat je ze kunt samenvoegen via *Actie › Samenvoegen*.
+
+Ook wat aangemaakt moet worden, wordt bij **Controleren** al op proef aangemaakt en weer
+teruggedraaid.
 Afsluitdatums worden gecontroleerd; Odoo mag de datum van een boeking nooit stilzwijgend
 verschuiven. Een nieuwe boeking krijgt als referentie het nummer uit de bron, zodat een
 tweede run ze herkent en overslaat.

@@ -54,13 +54,13 @@ class TestJournalTransfer(AccountTestInvoicingCommon):
             {"name": "Project X", "code": "PX", "plan_id": cls.plan.id})
         cls.records = {
             "account.account": {
-                11: {"id": 11, "code": cls.account_a.code, "name": "A"},
-                12: {"id": 12, "code": cls.account_b.code, "name": "B"},
-                13: {"id": 13, "code": "123ZZZ", "name": "Bestaat niet"},
+                11: {"id": 11, "code": cls.account_a.code, "name": "A", "account_type": "income", "reconcile": False},
+                12: {"id": 12, "code": cls.account_b.code, "name": "B", "account_type": "liability_payable", "reconcile": True},
+                13: {"id": 13, "code": "123ZZZ", "name": "Bestaat niet", "account_type": "expense", "reconcile": False},
             },
             "res.partner": {
-                21: {"id": 21, "name": "Andere naam", "vat": "BE0477472701", "ref": False},
-                22: {"id": 22, "name": "diverse leveranciers", "vat": False, "ref": False},
+                21: {"id": 21, "name": "Andere naam", "vat": "BE0477472701", "ref": False, "is_company": True, "email": False},
+                22: {"id": 22, "name": "diverse leveranciers", "vat": False, "ref": False, "is_company": True, "email": False},
             },
             "account.analytic.account": {
                 31: {"id": 31, "name": "Project X", "code": "PX", "plan_id": [5, "Projecten"]},
@@ -155,3 +155,35 @@ class TestJournalTransfer(AccountTestInvoicingCommon):
         self.assertFalse(wizard.can_transfer)
         self.assertIn("afgesloten periode", wizard.report_html)
         self.assertNotIn("AFSL/2025/01/0001: de datum", wizard.report_html)
+
+    def test_create_missing_records(self):
+        moves = [dict(self.moves[1], lines=[line(13, debit=40.0, partner=22), line(11, credit=40.0)])]
+        wizard = self._wizard(moves=moves, create_missing_accounts=True, create_missing_partners=True, post_moves=True)
+        wizard.action_check()
+        self.assertTrue(wizard.can_transfer, wizard.report_html)
+        self.assertIn("Wordt aangemaakt bij het overzetten (2)", wizard.report_html)
+        self.assertFalse(self.env["account.account"].search([("code", "=", "123ZZZ")]))
+
+        wizard.action_transfer()
+        account = self.env["account.account"].search([("code", "=", "123ZZZ")])
+        partner = self.env["res.partner"].search([("name", "=", "diverse leveranciers")])
+        self.assertEqual(account.account_type, "expense")
+        self.assertTrue(partner.is_company)
+        debit_line = self._transferred().line_ids.filtered("debit")
+        self.assertEqual((debit_line.account_id, debit_line.partner_id), (account, partner))
+
+    def test_partner_duplicates(self):
+        # Een gearchiveerde dubbel en een contactpersoon met hetzelfde btw-nummer zijn geen echte dubbels.
+        self.partner.copy({"active": False})
+        self.env["res.partner"].create({"name": "Jan", "parent_id": self.partner.id, "type": "contact"})
+        moves = [dict(self.moves[1], lines=[line(12, debit=40.0, partner=21), line(11, credit=40.0)])]
+        wizard = self._wizard(moves=moves)
+        wizard.action_check()
+        self.assertTrue(wizard.can_transfer, wizard.report_html)
+
+        # Twee actieve bedrijven met hetzelfde btw-nummer wel: dan tonen we welke.
+        twin = self.partner.copy({"name": "Maes NV SA (dubbel)", "vat": self.partner.vat})
+        wizard = self._wizard(moves=moves)
+        wizard.action_check()
+        self.assertFalse(wizard.can_transfer)
+        self.assertIn(f"[id {twin.id}]", wizard.report_html)

@@ -26,7 +26,10 @@
                         </group>
                         <group string="Opties">
                             <field name="transfer_partners"/>
-                            <field name="drop_missing_partners" invisible="not transfer_partners"/>
+                            <field name="create_missing_partners" invisible="not transfer_partners"/>
+                            <field name="drop_missing_partners"
+                                   invisible="not transfer_partners or create_missing_partners"/>
+                            <field name="create_missing_accounts"/>
                             <field name="transfer_analytic"/>
                             <field name="include_draft"/>
                         </group>
